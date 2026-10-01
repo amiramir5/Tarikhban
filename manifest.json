@@ -1,0 +1,27 @@
+{
+  "name": "تاریخ‌بان — روایت زنده‌ی ایران‌زمین",
+  "short_name": "تاریخ‌بان",
+  "description": "پیمایش تعاملی دوره‌های تاریخی ایران بر پایه‌ی اسناد آکادمیک",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "dir": "rtl",
+  "lang": "fa",
+  "theme_color": "#16213e",
+  "background_color": "#0f1626",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
