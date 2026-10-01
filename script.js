@@ -2234,6 +2234,12 @@ function initApp() {
     const savedVisits = parseInt(localStorage.getItem('tarikhban_visits') || '0', 10) || 0;
     localStorage.setItem('tarikhban_visits', String(savedVisits + 1));
   } catch (e) {}
+     /* ثبت Service Worker برای PWA */
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('./sw.js').catch(function () {});
+    });
+  }
 }
 
 if (document.readyState === 'loading') {
