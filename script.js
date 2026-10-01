@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════════════════
    تاریخ‌بان — منطق برنامه
-   بخش ۱ از ۲: هسته، آیکون‌ها، موتور صدا، پایگاه داده‌ی تاریخ
+   بخش ۱ از ۲: هسته، آیکون‌ها، موتور صدا، پایگاه داده، مدیریت حالت
    ═══════════════════════════════════════════════════════════════════════════ */
 
 'use strict';
@@ -9,21 +9,18 @@
    ابزارهای کمکی
    ─────────────────────────────────────────────────────────────────────────── */
 
-/** تبدیل ارقام لاتین به فارسی */
 function toPersianNum(n) {
   return String(n).replace(/\d/g, function (d) {
     return '۰۱۲۳۴۵۶۷۸۹'[d];
   });
 }
 
-/** تبدیل ارقام فارسی به لاتین (برای محاسبات) */
 function toLatinNum(s) {
   return String(s).replace(/[۰-۹]/g, function (d) {
     return '۰۱۲۳۴۵۶۷۸۹'.indexOf(d);
   });
 }
 
-/** جلوگیری از تزریق HTML در متن‌های پویا */
 function escapeHtml(str) {
   if (str === null || str === undefined) return '';
   return String(str).replace(/[&<>"']/g, function (ch) {
@@ -37,18 +34,24 @@ function escapeHtml(str) {
   });
 }
 
-/** انتخاب تصادفی از آرایه */
 function pickRandom(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-/** کلون عمیق ساده برای آبجکت‌های داده */
 function deepClone(obj) {
   return JSON.parse(JSON.stringify(obj));
 }
 
+function todayKey() {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return y + '-' + m + '-' + day;
+}
+
 /* ───────────────────────────────────────────────────────────────────────────
-   موتور صدا (Web Audio API — بدون فایل خارجی)
+   موتور صدا (Web Audio API)
    ─────────────────────────────────────────────────────────────────────────── */
 
 const SoundFx = {
@@ -59,11 +62,7 @@ const SoundFx = {
     if (this.ctx) return;
     const Ctx = window.AudioContext || window.webkitAudioContext;
     if (Ctx) {
-      try {
-        this.ctx = new Ctx();
-      } catch (e) {
-        this.ctx = null;
-      }
+      try { this.ctx = new Ctx(); } catch (e) { this.ctx = null; }
     }
   },
 
@@ -149,6 +148,16 @@ const SoundFx = {
         osc.stop(now + 0.32);
         break;
 
+      case 'bookmark':
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(880, now);
+        osc.frequency.exponentialRampToValueAtTime(1318.51, now + 0.1);
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+        osc.start(now);
+        osc.stop(now + 0.22);
+        break;
+
       default:
         osc.disconnect();
         gain.disconnect();
@@ -157,57 +166,38 @@ const SoundFx = {
 };
 
 /* ───────────────────────────────────────────────────────────────────────────
-   کتابخانه‌ی آیکون‌ها (SVG درون‌خطی)
+   کتابخانه‌ی آیکون‌ها
    ─────────────────────────────────────────────────────────────────────────── */
 
 const ICONS = {
   crown: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 18h18M3 18l1-9 5 4 3-7 3 7 5-4 1 9"/><circle cx="12" cy="6" r="1"/></svg>',
-
   scroll: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3h11a2 2 0 0 1 2 2v14a2 2 0 0 0 2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 1-2z"/><path d="M5 21V5a2 2 0 0 0-2 2v12"/><path d="M9 7h6M9 11h6M9 15h4"/></svg>',
-
   sword: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14.5 17.5L3 6V3h3l11.5 11.5"/><path d="M13 19l6-6"/><path d="M16 16l4 4"/><path d="M19 21l2-2"/></svg>',
-
   bow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 4c8 0 15 7 15 15"/><path d="M5 4l3 3M20 19l-3-3"/><path d="M5 20L20 5"/></svg>',
-
   shield: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l8 3v6c0 5-3.5 8.5-8 9-4.5-.5-8-4-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg>',
-
   book: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h7a3 3 0 0 1 3 3v13H7a3 3 0 0 0-3 3V4z"/><path d="M20 4h-7a3 3 0 0 0-3 3v13h7a3 3 0 0 1 3 3V4z"/></svg>',
-
   star: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l2.6 5.9L21 10l-4.5 4.4L17.5 21 12 17.7 6.5 21l1-6.6L3 10l6.4-1.1L12 3z"/></svg>',
-
   arch: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 21V10a8 8 0 0 1 16 0v11"/><path d="M2 21h20"/><path d="M10 21v-6a2 2 0 0 1 4 0v6"/></svg>',
-
   scales: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v18M7 21h10"/><path d="M5 7h14"/><path d="M5 7l-3 7h6zM19 7l-3 7h6z"/></svg>',
-
   temple: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 21h18M5 21V10M19 21V10"/><path d="M3 10l9-7 9 7"/><path d="M9 21v-5h6v5"/><path d="M10 10v3M14 10v3"/></svg>',
-
   horse: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20c0-4 2-7 6-8l1-4 4-4 2 3 3-1-1 4 3 3-4 1-2 3 1 3"/><circle cx="15" cy="6" r="0.5"/></svg>',
-
   flame: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3c1 4 5 6 5 11a5 5 0 0 1-10 0c0-3 2-4 3-6 .5 2 2 3 2 5 .5-3 0-7 0-10z"/></svg>',
-
   quill: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 4c-6 0-10 3-13 9l-3 7 7-3c6-3 9-7 9-13z"/><path d="M6 18L15 9"/></svg>',
-
   vizier: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3"/><path d="M5 21c0-4 3-7 7-7s7 3 7 7"/><path d="M9 5l3-2 3 2"/></svg>',
-
   tent: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 21L12 3l9 18"/><path d="M3 21h18"/><path d="M9 21l3-7 3 7"/></svg>',
-
   lion: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="3"/><path d="M12 5V3M12 21v-2M5 12H3M21 12h-2M7.5 7.5L6 6M18 18l-1.5-1.5M7.5 16.5L6 18M18 6l-1.5 1.5"/></svg>',
-
   seal: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="1"/><circle cx="12" cy="12" r="3.5"/><path d="M12 8.5v-2M12 17.5v-2M8.5 12h-2M17.5 12h-2"/></svg>',
-
   lantern: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 3h6M10 3v2M14 3v2"/><path d="M7 6h10l-1 4 1 4H8l1-4z"/><path d="M9 14v3h6v-3"/><path d="M12 17v4"/></svg>',
-
   zig: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 21h18"/><path d="M5 21V11h4V7h6v4h4v10"/><path d="M10 21v-4h4v4"/></svg>',
-
   flame2: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2c0 3 3 5 3 9a3 3 0 0 1-6 0c0-2 1-3 1-4-1 1-2 3-2 5a6 6 0 0 0 12 0c0-6-5-8-8-10z"/></svg>',
-
   scale: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v20"/><path d="M5 8l-3 6h6zM19 8l-3 6h6z"/><path d="M5 8h14"/></svg>',
-
-  coin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><path d="M9 10c0-1 1.5-2 3-2s3 1 3 2-1.5 2-3 2-3 1-3 2 1.5 2 3 2 3-1 3-2"/></svg>'
+  coin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><path d="M9 10c0-1 1.5-2 3-2s3 1 3 2-1.5 2-3 2-3 1-3 2 1.5 2 3 2 3-1 3-2"/></svg>',
+  notebook: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 3h11a3 3 0 0 1 3 3v15l-5-3-5 3-4-3V6a3 3 0 0 1 0-3z"/><path d="M9 8h6M9 12h4"/></svg>',
+  transfer: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 16l-4-4 4-4M17 8l4 4-4 4M3 12h18"/></svg>'
 };
 
 /* ───────────────────────────────────────────────────────────────────────────
-   داده‌ی نقشه‌ی سلسله‌ها (برای مودال Dynasty)
+   نقشه‌ی سلسله‌ها
    ─────────────────────────────────────────────────────────────────────────── */
 
 const DYNASTY_DATA = [
@@ -231,12 +221,38 @@ const DYNASTY_DATA = [
 ];
 
 /* ───────────────────────────────────────────────────────────────────────────
-   پایگاه داده‌ی کامل فصل‌های تاریخی (۲۰ فصل)
+   مختصات جغرافیایی هر فصل روی نقشه‌ی SVG (viewBox 0 0 900 700)
+   ─────────────────────────────────────────────────────────────────────────── */
+
+const MAP_POINTS = {
+  ch_elam_persia:              { x: 290, y: 470, label: 'شوش' },
+  ch_medes_cyrus:              { x: 330, y: 300, label: 'هگمتانه' },
+  ch_cyrus_babylon:            { x: 250, y: 420, label: 'بابل' },
+  ch_darius_behistun:          { x: 310, y: 350, label: 'بیستون' },
+  ch_parthian_rise:            { x: 660, y: 260, label: 'پارت' },
+  ch_carrhae_surena:           { x: 240, y: 380, label: 'حران' },
+  ch_ardashir_sasanian:        { x: 400, y: 480, label: 'استخر' },
+  ch_shapur_valerian:          { x: 350, y: 440, label: 'ادسا' },
+  ch_kartir_mani:              { x: 400, y: 480, label: 'بیشاپور' },
+  ch_anushirvan_reforms:       { x: 350, y: 400, label: 'تیسفون' },
+  ch_qadisiya_rostam:          { x: 300, y: 420, label: 'قادسیه' },
+  ch_samanid_renaissance:      { x: 640, y: 180, label: 'بخارا' },
+  ch_ferdowsi_mahmud:          { x: 640, y: 240, label: 'طوس' },
+  ch_seljuq_nizam:             { x: 460, y: 320, label: 'اصفهان' },
+  ch_tusi_hulagu:              { x: 380, y: 240, label: 'مراغه' },
+  ch_shah_ismail_chaldiran:    { x: 320, y: 220, label: 'چالدران' },
+  ch_shah_abbas_reforms:       { x: 460, y: 330, label: 'اصفهان' },
+  ch_amir_kabir_reforms:       { x: 440, y: 280, label: 'تهران' },
+  ch_tobacco_revolt:           { x: 400, y: 300, label: 'سامرا' },
+  ch_mashrooteh_revolution:    { x: 360, y: 240, label: 'تبریز' }
+};
+
+/* ───────────────────────────────────────────────────────────────────────────
+   پایگاه داده‌ی کامل ۲۰ فصل
    ─────────────────────────────────────────────────────────────────────────── */
 
 const CHAPTERS_DATA = [
 
-  /* ─────────── ۱. عیلام ─────────── */
   {
     id: 'ch_elam_persia',
     era: 'ancient',
@@ -246,7 +262,7 @@ const CHAPTERS_DATA = [
     iconKey: 'zig',
     speakerA: { name: 'پادشاه عیلام', role: 'فرمانروای شوش و انشان', sigil: 'ع' },
     speakerB: { name: 'کاهن اینشوشیناک', role: 'متولی معبد بزرگ شوش', sigil: 'ک' },
-    context: 'عیلامیان در دشت خوزستان کنونی نخستین تمدن شهری فلات ایران را بنیاد نهادند. شوش با معابد شکوهمند و نظام آبیاری پیشرفته، مرکز آیین و قدرت شد. پادشاهان عیلام با بین‌النهرین هم‌پیمان می‌شدند و هم می‌جنگیدند؛ سارگون اکدی (حدود ۲۳۰۰ پ.م) و سپس حمورابی بابل هر یک به عیلام چشم داشتند.',
+    context: 'عیلامیان در دشت خوزستان کنونی نخستین تمدن شهری فلات ایران را بنیاد نهادند. شوش با معابد شکوهمند و نظام آبیاری پیشرفته، مرکز آیین و قدرت شد. پادشاهان عیلام با بین‌النهرین هم‌پیمان می‌شدند و هم می‌جنگیدند؛ سارگون اکدی و سپس حمورابی بابل هر یک به عیلام چشم داشتند.',
     dialogueQuote: '«ای فرمانروا، معبد اینشوشیناک پناهگاه مردمان است، نه خزانه‌ی جنگ. اگر با اکد پیمان ببندی، بازرگانی شوش ایمن می‌ماند؛ اگر بشکنی، سپاه دشمن تا دروازه‌های زیگورات پیش خواهد آمد.»',
     sourceName: 'Encyclopaedia Iranica: "Elam" & The Cambridge History of Iran, Vol. 2',
     sourceDetails: 'کاوش‌های شوش و چغازنبیل نشان می‌دهند عیلامیان نخستین زیگورات ایران را ساختند و خط میخی عیلامی از هزاره‌ی سوم پیش از میلاد به‌کار می‌رفت. تمدن عیلامی سرانجام در سده‌ی ششم پیش از میلاد در شاهنشاهی هخامنشی ادغام شد.',
@@ -258,7 +274,6 @@ const CHAPTERS_DATA = [
     ]
   },
 
-  /* ─────────── ۲. قیام کوروش ─────────── */
   {
     id: 'ch_medes_cyrus',
     era: 'ancient',
@@ -280,7 +295,6 @@ const CHAPTERS_DATA = [
     ]
   },
 
-  /* ─────────── ۳. فتح بابل ─────────── */
   {
     id: 'ch_cyrus_babylon',
     era: 'ancient',
@@ -302,7 +316,6 @@ const CHAPTERS_DATA = [
     ]
   },
 
-  /* ─────────── ۴. داریوش بزرگ ─────────── */
   {
     id: 'ch_darius_behistun',
     era: 'ancient',
@@ -323,7 +336,6 @@ const CHAPTERS_DATA = [
     ]
   },
 
-  /* ─────────── ۵. اشکانیان ─────────── */
   {
     id: 'ch_parthian_rise',
     era: 'ancient',
@@ -333,10 +345,10 @@ const CHAPTERS_DATA = [
     iconKey: 'horse',
     speakerA: { name: 'ارشک یکم', role: 'بنیان‌گذار دودمان اشکانی از تبار پرنی', sigil: 'ا' },
     speakerB: { name: 'سرداران پارت', role: 'سران قبایل پارتی و هیرکانی', sigil: 'پ' },
-    context: 'پس از مرگ اسکندر (۳۲۳ پ.م)، سلوکیان بر فلات ایران مسلط شدند و فرهنگ یونانی را تحمیل کردند. در حدود ۲۴۷ پ.م، ارشک و برادرش تیرداد در پارت (خراسان کنونی) علیه سلوکیان قیام کردند و به تدریج سرزمین‌های شرقی ایران را آزاد ساختند.',
+    context: 'پس از مرگ اسکندر، سلوکیان بر فلات ایران مسلط شدند و فرهنگ یونانی را تحمیل کردند. در حدود ۲۴۷ پ.م، ارشک و برادرش تیرداد در پارت (خراسان کنونی) علیه سلوکیان قیام کردند و به تدریج سرزمین‌های شرقی ایران را آزاد ساختند.',
     dialogueQuote: '«برادر! یونانیان ما را به بندگی خوانده‌اند، اما ما فرزندان همان خاکی هستیم که کوروش بر آن فرمان راند. اگر امروز برخیزیم، فردا همه‌ی پارت با ماست؛ اگر بنشینیم، زبان و آیین نیاکانمان نیز از یادها خواهد رفت.»',
     sourceName: 'Encyclopaedia Iranica: "Arsaces" & The Cambridge History of Iran, Vol. 3(1)',
-    sourceDetails: 'سکه‌های نخستین اشکانی با عنوان «ارشک، شاه» ضرب شدند و بازتاب گسست از سنت سلوکی هستند. مهرداد یکم (حدود ۱۷۱–۱۳۸ پ.م) با فتح بین‌النهرین، عنوان «شاه شاهان» را احیا کرد و اشکانیان را به قدرت اول شرق بدل ساخت.',
+    sourceDetails: 'سکه‌های نخستین اشکانی با عنوان «ارشک، شاه» ضرب شدند و بازتاب گسست از سنت سلوکی هستند. مهرداد یکم با فتح بین‌النهرین، عنوان «شاه شاهان» را احیا کرد و اشکانیان را به قدرت اول شرق بدل ساخت.',
     question: 'ارشک و جانشینانش برای بقای در برابر سلوکیان چه راهبردی برگزیدند؟',
     options: [
       { text: 'اتحاد قبایل پارتی و هیرکانی، پرهیز از نبرد مستقیم با سلوکیان در ابتدا، و سپس گسترش تدریجی به‌سوی غرب برای فتح بین‌النهرین.', isHistorical: true, feedback: 'دقیق! اشکانیان با صبر راهبردی، ابتدا پارت را مستحکم کردند، سپس در دوران مهرداد یکم به‌سوی غرب پیش رفتند و در نبرد با آنتیوخوس هفتم، سلطه‌ی سلوکی را برای همیشه برانداختند.', wisdomGain: 22, xpGain: 105 },
@@ -345,7 +357,6 @@ const CHAPTERS_DATA = [
     ]
   },
 
-  /* ─────────── ۶. نبرد حران ─────────── */
   {
     id: 'ch_carrhae_surena',
     era: 'ancient',
@@ -366,7 +377,6 @@ const CHAPTERS_DATA = [
     ]
   },
 
-  /* ─────────── ۷. اردشیر بابکان ─────────── */
   {
     id: 'ch_ardashir_sasanian',
     era: 'classical',
@@ -387,7 +397,6 @@ const CHAPTERS_DATA = [
     ]
   },
 
-  /* ─────────── ۸. شاپور و والریانوس ─────────── */
   {
     id: 'ch_shapur_valerian',
     era: 'classical',
@@ -408,7 +417,6 @@ const CHAPTERS_DATA = [
     ]
   },
 
-  /* ─────────── ۹. کرتیر و مانی ─────────── */
   {
     id: 'ch_kartir_mani',
     era: 'classical',
@@ -429,7 +437,6 @@ const CHAPTERS_DATA = [
     ]
   },
 
-  /* ─────────── ۱۰. انوشیروان ─────────── */
   {
     id: 'ch_anushirvan_reforms',
     era: 'classical',
@@ -450,7 +457,6 @@ const CHAPTERS_DATA = [
     ]
   },
 
-  /* ─────────── ۱۱. قادسیه ─────────── */
   {
     id: 'ch_qadisiya_rostam',
     era: 'islamic',
@@ -471,7 +477,6 @@ const CHAPTERS_DATA = [
     ]
   },
 
-  /* ─────────── ۱۲. سامانیان ─────────── */
   {
     id: 'ch_samanid_renaissance',
     era: 'islamic',
@@ -492,7 +497,6 @@ const CHAPTERS_DATA = [
     ]
   },
 
-  /* ─────────── ۱۳. فردوسی و محمود ─────────── */
   {
     id: 'ch_ferdowsi_mahmud',
     era: 'islamic',
@@ -513,7 +517,6 @@ const CHAPTERS_DATA = [
     ]
   },
 
-  /* ─────────── ۱۴. سلجوقیان و نظام‌الملک ─────────── */
   {
     id: 'ch_seljuq_nizam',
     era: 'islamic',
@@ -534,7 +537,6 @@ const CHAPTERS_DATA = [
     ]
   },
 
-  /* ─────────── ۱۵. خواجه نصیر و هلاکو ─────────── */
   {
     id: 'ch_tusi_hulagu',
     era: 'islamic',
@@ -555,7 +557,6 @@ const CHAPTERS_DATA = [
     ]
   },
 
-  /* ─────────── ۱۶. شاه اسماعیل و چالدران ─────────── */
   {
     id: 'ch_shah_ismail_chaldiran',
     era: 'modern',
@@ -576,7 +577,6 @@ const CHAPTERS_DATA = [
     ]
   },
 
-  /* ─────────── ۱۷. شاه عباس ─────────── */
   {
     id: 'ch_shah_abbas_reforms',
     era: 'modern',
@@ -597,7 +597,6 @@ const CHAPTERS_DATA = [
     ]
   },
 
-  /* ─────────── ۱۸. امیرکبیر ─────────── */
   {
     id: 'ch_amir_kabir_reforms',
     era: 'modern',
@@ -618,7 +617,6 @@ const CHAPTERS_DATA = [
     ]
   },
 
-  /* ─────────── ۱۹. قیام تنباکو ─────────── */
   {
     id: 'ch_tobacco_revolt',
     era: 'modern',
@@ -639,7 +637,6 @@ const CHAPTERS_DATA = [
     ]
   },
 
-  /* ─────────── ۲۰. مشروطه ─────────── */
   {
     id: 'ch_mashrooteh_revolution',
     era: 'modern',
@@ -663,11 +660,11 @@ const CHAPTERS_DATA = [
 ];
 
 /* ───────────────────────────────────────────────────────────────────────────
-   فهرست مدال‌ها و دستاوردها
+   فهرست مدال‌ها و دستاوردها (شامل مدال‌های قابلیت‌های جدید)
    ─────────────────────────────────────────────────────────────────────────── */
 
 const AWARDS_LIST = [
-  { id: 'first_step', title: 'گام نخستین در تاریخ', desc: 'پاسخ به نخستین دوراهی سرنوشت‌ساز تاریخی', icon: 'foot', check: function (s) { return s.completedChapters.length >= 1; } },
+  { id: 'first_step', title: 'گام نخستین در تاریخ', desc: 'پاسخ به نخستین دوراهی سرنوشت‌ساز تاریخی', icon: 'crown', check: function (s) { return s.completedChapters.length >= 1; } },
   { id: 'elam_guardian', title: 'نگهبان عیلام', desc: 'کشف نخستین تمدن فلات ایران', icon: 'zig', check: function (s) { return s.completedChapters.indexOf('ch_elam_persia') !== -1; } },
   { id: 'achaemenid_heritage', title: 'وارث هخامنشی', desc: 'پیمایش تمام فصل‌های هخامنشی', icon: 'crown', check: function (s) { return ['ch_medes_cyrus', 'ch_cyrus_babylon', 'ch_darius_behistun'].every(function (id) { return s.completedChapters.indexOf(id) !== -1; }); } },
   { id: 'parthian_horseman', title: 'سوار پارتی', desc: 'شناخت هنر نظامی اشکانیان', icon: 'horse', check: function (s) { return ['ch_parthian_rise', 'ch_carrhae_surena'].every(function (id) { return s.completedChapters.indexOf(id) !== -1; }); } },
@@ -676,19 +673,15 @@ const AWARDS_LIST = [
   { id: 'wisdom_100', title: 'خردورز صاحب‌نظر', desc: 'کسب بیش از ۱۰۰ امتیاز بصیرت تاریخی', icon: 'scroll', check: function (s) { return s.wisdom >= 100; } },
   { id: 'wisdom_200', title: 'حکیم بصیر', desc: 'کسب بیش از ۲۰۰ امتیاز بصیرت تاریخی', icon: 'star', check: function (s) { return s.wisdom >= 200; } },
   { id: 'modern_citizen', title: 'شهروند قانون‌گرا', desc: 'شناخت نقاط عطف دوران معاصر', icon: 'scales', check: function (s) { return ['ch_tobacco_revolt', 'ch_mashrooteh_revolution', 'ch_amir_kabir_reforms'].every(function (id) { return s.completedChapters.indexOf(id) !== -1; }); } },
+  { id: 'curator', title: 'کتاب‌دار فصل‌ها', desc: 'نشان‌گذاری پنج فصل از داستان ایران', icon: 'star', check: function (s) { return (s.bookmarkedChapters || []).length >= 5; } },
+  { id: 'note_writer', title: 'یادداشت‌نگار دقیق', desc: 'نوشتن یادداشت شخصی برای پنج فصل', icon: 'notebook', check: function (s) { return Object.keys(s.notes || {}).filter(function (k) { return (s.notes[k] || '').trim().length > 0; }).length >= 5; } },
+  { id: 'challenger_3', title: 'چالش‌پذیر سرسخت', desc: 'پیروزی در سه چالش روزانه', icon: 'star', check: function (s) { return (s.challengeWins || 0) >= 3; } },
+  { id: 'challenger_7', title: 'همراه همیشگی', desc: 'پیروزی در هفت چالش روزانه', icon: 'lantern', check: function (s) { return (s.challengeWins || 0) >= 7; } },
   { id: 'full_chronicle', title: 'میراث‌دار تاریخ‌بان', desc: 'تکمیل تمامی ۲۰ فصل تاریخ ایران', icon: 'lion', check: function (s) { return s.completedChapters.length === CHAPTERS_DATA.length; } }
 ];
 
-/* پایان بخش ۱ از فایل script.js — بخش دوم در پیام بعدی */
-/* ═══════════════════════════════════════════════════════════════════════════
-   تاریخ‌بان — منطق برنامه
-   بخش ۲ از ۲: مدیریت حالت، رندر رابط کاربری، رویدادها و راه‌اندازی
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-'use strict';
-
 /* ───────────────────────────────────────────────────────────────────────────
-   ثابت‌های حالت
+   مدیریت حالت (localStorage)
    ─────────────────────────────────────────────────────────────────────────── */
 
 const STORAGE_KEY = 'tarikhban_v3';
@@ -709,12 +702,9 @@ const ERA_LABELS = {
   ancient: 'باستان',
   classical: 'میانه',
   islamic: 'دوره‌ی اسلامی',
-  modern: 'معاصر'
+  modern: 'معاصر',
+  bookmarked: 'نشان‌شده‌ها'
 };
-
-/* ───────────────────────────────────────────────────────────────────────────
-   حالت پیش‌فرض و مدیریت localStorage
-   ─────────────────────────────────────────────────────────────────────────── */
 
 function createInitialState() {
   return {
@@ -726,25 +716,42 @@ function createInitialState() {
     unlockedAwards: [],
     isAnsweredCurrent: false,
     activeEra: 'all',
-    lastVisit: Date.now(),
+    viewMode: 'cards',
+    bookmarkedChapters: [],
+    notes: {},
+    challengeWins: 0,
+    challengeLastDate: '',
+    challengeAnsweredToday: false,
     totalCorrect: 0,
-    totalAnswered: 0
+    totalAnswered: 0,
+    lastVisit: Date.now()
   };
 }
 
 let gameState = createInitialState();
 
-/**
- * بارگذاری حالت از localStorage.
- * مهاجرت خودکار از نسخه‌ی قدیمی v2.
- */
+function sanitizeArrayIds(arr) {
+  if (!Array.isArray(arr)) return [];
+  return arr.filter(function (id) {
+    return CHAPTERS_DATA.some(function (c) { return c.id === id; });
+  });
+}
+
+function sanitizeNotes(notes) {
+  if (!notes || typeof notes !== 'object') return {};
+  const cleaned = {};
+  Object.keys(notes).forEach(function (key) {
+    const exists = CHAPTERS_DATA.some(function (c) { return c.id === key; });
+    if (exists && typeof notes[key] === 'string') {
+      cleaned[key] = notes[key];
+    }
+  });
+  return cleaned;
+}
+
 function loadSavedState() {
   let raw = null;
-  try {
-    raw = localStorage.getItem(STORAGE_KEY);
-  } catch (e) {
-    raw = null;
-  }
+  try { raw = localStorage.getItem(STORAGE_KEY); } catch (e) { raw = null; }
 
   if (!raw) {
     try {
@@ -755,26 +762,17 @@ function loadSavedState() {
         if (typeof old.xp === 'number') migrated.xp = old.xp;
         if (typeof old.level === 'number') migrated.level = old.level;
         if (typeof old.wisdom === 'number') migrated.wisdom = old.wisdom;
-        if (Array.isArray(old.completedChapters)) {
-          migrated.completedChapters = old.completedChapters.filter(function (id) {
-            return CHAPTERS_DATA.some(function (c) { return c.id === id; });
-          });
-        }
-        if (Array.isArray(old.unlockedAwards)) {
-          migrated.unlockedAwards = old.unlockedAwards.slice();
-        }
-        if (old.currentChapterId) {
-          const exists = CHAPTERS_DATA.some(function (c) { return c.id === old.currentChapterId; });
-          if (exists) migrated.currentChapterId = old.currentChapterId;
+        migrated.completedChapters = sanitizeArrayIds(old.completedChapters);
+        if (Array.isArray(old.unlockedAwards)) migrated.unlockedAwards = old.unlockedAwards.slice();
+        if (old.currentChapterId && CHAPTERS_DATA.some(function (c) { return c.id === old.currentChapterId; })) {
+          migrated.currentChapterId = old.currentChapterId;
         }
         gameState = migrated;
         persistState();
         try { localStorage.removeItem(LEGACY_STORAGE_KEY); } catch (e) {}
         return;
       }
-    } catch (e) {
-      /* ذخیره‌ی قدیمی معیوب؛ نادیده گرفته می‌شود */
-    }
+    } catch (e) {}
     gameState = createInitialState();
     return;
   }
@@ -785,22 +783,19 @@ function loadSavedState() {
     if (typeof parsed.xp === 'number') fresh.xp = parsed.xp;
     if (typeof parsed.level === 'number') fresh.level = parsed.level;
     if (typeof parsed.wisdom === 'number') fresh.wisdom = parsed.wisdom;
-    if (Array.isArray(parsed.completedChapters)) {
-      fresh.completedChapters = parsed.completedChapters.filter(function (id) {
-        return CHAPTERS_DATA.some(function (c) { return c.id === id; });
-      });
-    }
-    if (Array.isArray(parsed.unlockedAwards)) {
-      fresh.unlockedAwards = parsed.unlockedAwards.slice();
-    }
-    if (typeof parsed.currentChapterId === 'string') {
-      const exists = CHAPTERS_DATA.some(function (c) { return c.id === parsed.currentChapterId; });
-      if (exists) fresh.currentChapterId = parsed.currentChapterId;
+    fresh.completedChapters = sanitizeArrayIds(parsed.completedChapters);
+    if (Array.isArray(parsed.unlockedAwards)) fresh.unlockedAwards = parsed.unlockedAwards.slice();
+    if (typeof parsed.currentChapterId === 'string' && CHAPTERS_DATA.some(function (c) { return c.id === parsed.currentChapterId; })) {
+      fresh.currentChapterId = parsed.currentChapterId;
     }
     if (typeof parsed.isAnsweredCurrent === 'boolean') fresh.isAnsweredCurrent = parsed.isAnsweredCurrent;
-    if (typeof parsed.activeEra === 'string' && ERA_LABELS[parsed.activeEra]) {
-      fresh.activeEra = parsed.activeEra;
-    }
+    if (typeof parsed.activeEra === 'string' && ERA_LABELS[parsed.activeEra]) fresh.activeEra = parsed.activeEra;
+    if (parsed.viewMode === 'map' || parsed.viewMode === 'cards') fresh.viewMode = parsed.viewMode;
+    fresh.bookmarkedChapters = sanitizeArrayIds(parsed.bookmarkedChapters);
+    fresh.notes = sanitizeNotes(parsed.notes);
+    if (typeof parsed.challengeWins === 'number') fresh.challengeWins = parsed.challengeWins;
+    if (typeof parsed.challengeLastDate === 'string') fresh.challengeLastDate = parsed.challengeLastDate;
+    if (typeof parsed.challengeAnsweredToday === 'boolean') fresh.challengeAnsweredToday = parsed.challengeAnsweredToday;
     if (typeof parsed.totalCorrect === 'number') fresh.totalCorrect = parsed.totalCorrect;
     if (typeof parsed.totalAnswered === 'number') fresh.totalAnswered = parsed.totalAnswered;
     gameState = fresh;
@@ -813,17 +808,14 @@ function persistState() {
   gameState.lastVisit = Date.now();
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(gameState));
-  } catch (e) {
-    /* حافظه‌ی مرورگر پر است یا دسترسی مسدود است */
-  }
-  refreshStatsUI();
+  } catch (e) {}
+  if (typeof refreshStatsUI === 'function') refreshStatsUI();
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   محاسبات سطح و امتیاز
+   محاسبات سطح
    ─────────────────────────────────────────────────────────────────────────── */
 
-/** با توجه به xp فعلی، سطح را بازمحاسبه می‌کند (پشتیبانی از ارتقای چندسطحی) */
 function recalcLevel(previousLevel) {
   let newLevel = 1;
   while (gameState.xp >= newLevel * XP_PER_LEVEL && newLevel < 999) {
@@ -841,16 +833,29 @@ function getLevelTitle(level) {
 function getXpProgressPct() {
   const floor = (gameState.level - 1) * XP_PER_LEVEL;
   const inLevel = gameState.xp - floor;
-  const pct = Math.max(0, Math.min(100, (inLevel / XP_PER_LEVEL) * 100));
-  return pct;
+  return Math.max(0, Math.min(100, (inLevel / XP_PER_LEVEL) * 100));
 }
+
+/* پایان بخش ۱ از فایل script.js */
+/* ═══════════════════════════════════════════════════════════════════════════
+   تاریخ‌بان — منطق برنامه
+   بخش ۲ از ۲: رابط کاربری، نقشه، نشان‌گذاری، یادداشت، انتقال، چالش روزانه
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+'use strict';
+
+/* ───────────────────────────────────────────────────────────────────────────
+   کش حالت نمایش
+   ─────────────────────────────────────────────────────────────────────────── */
+
+let currentChapterCache = null;
+let currentChallenge = null;
 
 /* ───────────────────────────────────────────────────────────────────────────
    به‌روزرسانی رابط کاربری هدر و هاب
    ─────────────────────────────────────────────────────────────────────────── */
 
 function refreshStatsUI() {
-  /* هدر — سطح و XP */
   const xpBar = document.getElementById('playerXpBar');
   const xpText = document.getElementById('playerXpText');
   const levelBadge = document.getElementById('playerLevelBadge');
@@ -863,7 +868,6 @@ function refreshStatsUI() {
   if (playerTitle) playerTitle.textContent = getLevelTitle(gameState.level);
   if (wisdomBadge) wisdomBadge.textContent = toPersianNum(gameState.wisdom);
 
-  /* هاب — ویجت پیشرفت */
   const hubProgressBadge = document.getElementById('hubProgressBadge');
   const widgetWisdomBar = document.getElementById('widgetWisdomBar');
   const widgetWisdomRatio = document.getElementById('widgetWisdomRatio');
@@ -885,9 +889,10 @@ function refreshStatsUI() {
     if (spotlightTitle) spotlightTitle.textContent = nextChapter.title;
     if (spotlightDesc) spotlightDesc.textContent = nextChapter.summary;
   }
+
+  updateDailyChallengeButton();
 }
 
-/** نخستین فصل تکمیل‌نشده را برمی‌گرداند */
 function findNextSuggestedChapter() {
   for (let i = 0; i < CHAPTERS_DATA.length; i++) {
     if (gameState.completedChapters.indexOf(CHAPTERS_DATA[i].id) === -1) {
@@ -895,6 +900,51 @@ function findNextSuggestedChapter() {
     }
   }
   return CHAPTERS_DATA[0] || null;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   منطق نشان‌گذاری و یادداشت
+   ─────────────────────────────────────────────────────────────────────────── */
+
+function isBookmarked(chapterId) {
+  return (gameState.bookmarkedChapters || []).indexOf(chapterId) !== -1;
+}
+
+function toggleBookmark(chapterId) {
+  if (!Array.isArray(gameState.bookmarkedChapters)) {
+    gameState.bookmarkedChapters = [];
+  }
+  const idx = gameState.bookmarkedChapters.indexOf(chapterId);
+  const btn = document.getElementById('btnBookmark');
+
+  if (idx === -1) {
+    gameState.bookmarkedChapters.push(chapterId);
+    SoundFx.play('bookmark');
+    if (btn) btn.classList.add('is-bookmarked');
+    showToast('فصل به نشان‌شده‌ها افزوده شد', 'success');
+  } else {
+    gameState.bookmarkedChapters.splice(idx, 1);
+    SoundFx.play('click');
+    if (btn) btn.classList.remove('is-bookmarked');
+    showToast('فصل از نشان‌شده‌ها حذف شد', 'info');
+  }
+
+  evaluateAwards();
+  persistState();
+  renderChaptersGrid();
+}
+
+function saveChapterNote(chapterId, text) {
+  if (!gameState.notes || typeof gameState.notes !== 'object') {
+    gameState.notes = {};
+  }
+  if (text && text.trim().length > 0) {
+    gameState.notes[chapterId] = text;
+  } else {
+    delete gameState.notes[chapterId];
+  }
+  persistState();
+  evaluateAwards();
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
@@ -907,55 +957,85 @@ function isChapterUnlocked(index) {
   return gameState.completedChapters.indexOf(prevId) !== -1;
 }
 
+function getFilteredChapters() {
+  const filterEra = gameState.activeEra || 'all';
+
+  if (filterEra === 'bookmarked') {
+    return CHAPTERS_DATA.filter(function (c) {
+      return isBookmarked(c.id);
+    }).map(function (c) {
+      return { chapter: c, index: CHAPTERS_DATA.indexOf(c) };
+    });
+  }
+
+  return CHAPTERS_DATA.map(function (c, i) {
+    return { chapter: c, index: i };
+  }).filter(function (item) {
+    return filterEra === 'all' || item.chapter.era === filterEra;
+  });
+}
+
 function renderChaptersGrid() {
   const container = document.getElementById('chaptersGrid');
   const emptyState = document.getElementById('chaptersEmpty');
+  const emptyText = document.getElementById('chaptersEmptyText');
+  const mapView = document.getElementById('mapView');
+
   if (!container) return;
+
+  /* سوییچ نمایش کارت/نقشه */
+  if (gameState.viewMode === 'map') {
+    container.classList.add('is-hidden');
+    if (mapView) mapView.classList.remove('is-hidden');
+    if (emptyState) emptyState.classList.add('is-hidden');
+    renderMapView();
+    return;
+  } else {
+    container.classList.remove('is-hidden');
+    if (mapView) mapView.classList.add('is-hidden');
+  }
 
   container.innerHTML = '';
 
-  const filterEra = gameState.activeEra || 'all';
-  let visibleCount = 0;
+  const filtered = getFilteredChapters();
+  let visibleCount = filtered.length;
 
-  CHAPTERS_DATA.forEach(function (chap, index) {
-    if (filterEra !== 'all' && chap.era !== filterEra) return;
-    visibleCount++;
-
+  filtered.forEach(function (item) {
+    const chap = item.chapter;
+    const index = item.index;
     const isDone = gameState.completedChapters.indexOf(chap.id) !== -1;
     const isUnlocked = isChapterUnlocked(index);
     const isLocked = !isUnlocked;
+    const marked = isBookmarked(chap.id);
 
     const card = document.createElement('article');
     card.className = 'chapter-card';
     if (isDone) card.classList.add('is-done');
     if (isLocked) card.classList.add('is-locked');
+    if (marked) card.classList.add('is-bookmarked');
 
     let statusClass = 'status-unlocked';
     let statusText = 'در دسترس';
-    if (isDone) {
-      statusClass = 'status-done';
-      statusText = 'تکمیل شده';
-    } else if (isLocked) {
-      statusClass = 'status-locked';
-      statusText = 'قفل';
-    }
+    if (isDone) { statusClass = 'status-done'; statusText = 'تکمیل شده'; }
+    else if (isLocked) { statusClass = 'status-locked'; statusText = 'قفل'; }
 
     let footBtnClass = 'foot-btn-open';
     let footBtnText = 'آغاز رویداد';
-    if (isDone) {
-      footBtnClass = 'foot-btn-review';
-      footBtnText = 'بازخوانی';
-    } else if (isLocked) {
-      footBtnClass = 'foot-btn-locked';
-      footBtnText = 'قفل';
-    }
+    if (isDone) { footBtnClass = 'foot-btn-review'; footBtnText = 'بازخوانی'; }
+    else if (isLocked) { footBtnClass = 'foot-btn-locked'; footBtnText = 'قفل'; }
 
     const iconSvg = ICONS[chap.iconKey] || ICONS.scroll;
+    const bookmarkMark = marked
+      ? '<span class="chapter-bookmark-mark">' + ICONS.star + '</span>'
+      : '';
 
     card.innerHTML =
       '<div class="chapter-card-head">' +
         '<div class="chapter-icon">' + iconSvg + '</div>' +
-        '<span class="chapter-status ' + statusClass + '">' + statusText + '</span>' +
+        '<div class="chapter-card-badges">' +
+          bookmarkMark +
+          '<span class="chapter-status ' + statusClass + '">' + statusText + '</span>' +
+        '</div>' +
       '</div>' +
       '<span class="chapter-period">' + escapeHtml(chap.period) + '</span>' +
       '<h4 class="chapter-title">' + escapeHtml(chap.title) + '</h4>' +
@@ -981,6 +1061,13 @@ function renderChaptersGrid() {
   if (emptyState) {
     if (visibleCount === 0) {
       emptyState.classList.remove('is-hidden');
+      if (emptyText) {
+        if (gameState.activeEra === 'bookmarked') {
+          emptyText.textContent = 'هنوز فصلی را نشان نکرده‌اید. با کلیک روی ★ در بالای هر فصل، آن را نشان کنید.';
+        } else {
+          emptyText.textContent = 'فصلی در این دوره یافت نشد.';
+        }
+      }
     } else {
       emptyState.classList.add('is-hidden');
     }
@@ -988,10 +1075,76 @@ function renderChaptersGrid() {
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   نمای داستان
+   رندر نقشه‌ی ایران
    ─────────────────────────────────────────────────────────────────────────── */
 
-let currentChapterCache = null;
+function renderMapView() {
+  const pointsGroup = document.getElementById('mapPoints');
+  if (!pointsGroup) return;
+
+  pointsGroup.innerHTML = '';
+
+  const filtered = getFilteredChapters();
+  const filteredIds = filtered.map(function (item) { return item.chapter.id; });
+
+  CHAPTERS_DATA.forEach(function (chap, index) {
+    /* فقط فصل‌های فیلترشده روی نقشه نمایش داده می‌شوند */
+    if (filteredIds.indexOf(chap.id) === -1) return;
+
+    const point = MAP_POINTS[chap.id];
+    if (!point) return;
+
+    const isDone = gameState.completedChapters.indexOf(chap.id) !== -1;
+    const isUnlocked = isChapterUnlocked(index);
+    const isLocked = !isUnlocked;
+    const marked = isBookmarked(chap.id);
+
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.setAttribute('class', 'map-point' +
+      (isDone ? ' is-done' : '') +
+      (isLocked ? ' is-locked' : '') +
+      (marked ? ' is-bookmarked' : ''));
+    g.setAttribute('transform', 'translate(' + point.x + ',' + point.y + ')');
+
+    /* هاله */
+    const halo = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    halo.setAttribute('class', 'map-point-halo');
+    halo.setAttribute('r', '10');
+    g.appendChild(halo);
+
+    /* هسته */
+    const core = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    core.setAttribute('class', 'map-point-core');
+    core.setAttribute('r', '5');
+    g.appendChild(core);
+
+    /* برچسب */
+    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    label.setAttribute('class', 'map-point-label');
+    label.setAttribute('y', '-16');
+    label.textContent = point.label;
+    g.appendChild(label);
+
+    /* عنوان کامل - برای tooltip مرورگر */
+    const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+    title.textContent = chap.title + ' — ' + chap.period;
+    g.appendChild(title);
+
+    if (!isLocked) {
+      g.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        SoundFx.play('click');
+        openChapterStory(chap.id);
+      });
+    }
+
+    pointsGroup.appendChild(g);
+  });
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   نمای داستان
+   ─────────────────────────────────────────────────────────────────────────── */
 
 function showView(viewId) {
   const hub = document.getElementById('viewHub');
@@ -1042,6 +1195,26 @@ function openChapterStory(chapterId) {
   if (dialogueExplanation) {
     dialogueExplanation.classList.add('is-hidden');
     dialogueExplanation.textContent = '';
+  }
+
+  /* دکمه‌ی نشان‌گذاری */
+  const bookmarkBtn = document.getElementById('btnBookmark');
+  if (bookmarkBtn) {
+    if (isBookmarked(chapterId)) {
+      bookmarkBtn.classList.add('is-bookmarked');
+      bookmarkBtn.setAttribute('title', 'حذف از نشان‌شده‌ها');
+    } else {
+      bookmarkBtn.classList.remove('is-bookmarked');
+      bookmarkBtn.setAttribute('title', 'نشان‌گذاری این فصل');
+    }
+  }
+
+  /* یادداشت */
+  const notesInput = document.getElementById('notesInput');
+  if (notesInput) {
+    notesInput.value = (gameState.notes && gameState.notes[chapterId]) || '';
+    /* حذف شنونده‌های قبلی با شبیه‌سازی: ذخیره در data attribute */
+    notesInput.dataset.chapterId = chapterId;
   }
 
   /* گزینه‌ها */
@@ -1102,27 +1275,22 @@ function handleChoiceSelection(selectedIndex) {
   gameState.isAnsweredCurrent = true;
   gameState.totalAnswered++;
 
-  /* ناتوان‌سازی تمام گزینه‌ها */
   const allOptions = document.querySelectorAll('#optionsContainer .option-btn');
   allOptions.forEach(function (b) { b.disabled = true; });
 
-  /* به‌روزرسانی امتیازها */
   const prevLevel = gameState.level;
   gameState.xp += chosen.xpGain || 0;
   gameState.wisdom += chosen.wisdomGain || 0;
   if (chosen.isHistorical) gameState.totalCorrect++;
 
-  /* بازمحاسبه‌ی سطح */
   const levelUps = recalcLevel(prevLevel);
 
-  /* صدا */
   if (chosen.isHistorical) {
     SoundFx.play('correct');
   } else {
     SoundFx.play('learn');
   }
 
-  /* ثبت اتمام فصل */
   if (gameState.completedChapters.indexOf(chapter.id) === -1) {
     gameState.completedChapters.push(chapter.id);
     showToast('فصل «' + chapter.title + '» با موفقیت فتح شد', 'success');
@@ -1133,11 +1301,8 @@ function handleChoiceSelection(selectedIndex) {
     showToast('تبریک! به سطح ' + toPersianNum(gameState.level) + ' رسیدید', 'award');
   }
 
-  /* ارزیابی مدال‌ها */
   evaluateAwards();
   persistState();
-
-  /* نمایش بازخورد */
   renderFeedback(chosen, chapter);
 }
 
@@ -1196,7 +1361,6 @@ function renderFeedback(chosen, chapter) {
 
   panel.classList.remove('is-hidden');
 
-  /* رویدادها */
   const backBtn = document.getElementById('btnBackFromFeedback');
   const nextBtn = document.getElementById('btnNextChapter');
   if (backBtn) backBtn.addEventListener('click', backToChronicleHub);
@@ -1221,7 +1385,6 @@ function gotoNextChapter(currentId) {
   }
 
   let nextIdx = idx + 1;
-  /* اولین فصل بعدی که قفل نیست */
   while (nextIdx < CHAPTERS_DATA.length && !isChapterUnlocked(nextIdx)) {
     nextIdx++;
   }
@@ -1245,7 +1408,7 @@ function backToChronicleHub() {
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   مدیریت مدال‌ها
+   مدال‌ها
    ─────────────────────────────────────────────────────────────────────────── */
 
 function evaluateAwards() {
@@ -1296,7 +1459,7 @@ function renderAwardsModal() {
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   رندر نقشه‌ی سلسله‌ها
+   نقشه‌ی سلسله‌ها
    ─────────────────────────────────────────────────────────────────────────── */
 
 function renderDynastyTimeline() {
@@ -1319,7 +1482,7 @@ function renderDynastyTimeline() {
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   رندر آمار
+   آمار
    ─────────────────────────────────────────────────────────────────────────── */
 
 function renderStatsModal() {
@@ -1342,16 +1505,21 @@ function renderStatsModal() {
     }
   });
 
-  function progressRow(label, done, total) {
-    const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+  function progressRow(label, doneVal, totalVal) {
+    const pct = totalVal > 0 ? Math.round((doneVal / totalVal) * 100) : 0;
     return (
       '<div class="progress-item">' +
         '<span class="progress-item-label">' + label + '</span>' +
         '<div class="progress-item-bar"><div class="progress-item-fill" style="width:' + pct + '%"></div></div>' +
-        '<span class="progress-item-value">' + toPersianNum(done) + ' / ' + toPersianNum(total) + '</span>' +
+        '<span class="progress-item-value">' + toPersianNum(doneVal) + ' / ' + toPersianNum(totalVal) + '</span>' +
       '</div>'
     );
   }
+
+  const markedCount = (gameState.bookmarkedChapters || []).length;
+  const notesCount = Object.keys(gameState.notes || {}).filter(function (k) {
+    return (gameState.notes[k] || '').trim().length > 0;
+  }).length;
 
   container.innerHTML =
     '<section class="stats-section">' +
@@ -1375,13 +1543,31 @@ function renderStatsModal() {
       '</div>' +
     '</section>' +
     '<section class="stats-section">' +
-      '<h4 class="stats-section-title">دستاوردها</h4>' +
+      '<h4 class="stats-section-title">دستاوردها و فعالیت</h4>' +
       '<div class="stats-grid">' +
         '<div class="stat-cell"><div class="stat-cell-value">' + toPersianNum(gameState.unlockedAwards.length) + '</div><div class="stat-cell-label">مدال کسب‌شده</div></div>' +
         '<div class="stat-cell"><div class="stat-cell-value">' + toPersianNum(AWARDS_LIST.length) + '</div><div class="stat-cell-label">کل مدال‌ها</div></div>' +
+        '<div class="stat-cell"><div class="stat-cell-value">' + toPersianNum(markedCount) + '</div><div class="stat-cell-label">فصل نشان‌شده</div></div>' +
+        '<div class="stat-cell"><div class="stat-cell-value">' + toPersianNum(notesCount) + '</div><div class="stat-cell-label">یادداشت نوشته</div></div>' +
+        '<div class="stat-cell"><div class="stat-cell-value">' + toPersianNum(gameState.challengeWins || 0) + '</div><div class="stat-cell-label">چالش برده</div></div>' +
         '<div class="stat-cell"><div class="stat-cell-value">' + toPersianNum(gameState.totalAnswered) + '</div><div class="stat-cell-label">مجموع انتخاب‌ها</div></div>' +
       '</div>' +
+    '</section>' +
+    '<section class="stats-section">' +
+      '<h4 class="stats-section-title">انتقال پیشرفت</h4>' +
+      '<div class="modal-actions" style="justify-content:flex-start;margin-top:0">' +
+        '<button type="button" class="btn btn-outline btn-sm" id="btnOpenTransferFromStats">خروجی / ورودی پیشرفت</button>' +
+      '</div>' +
     '</section>';
+
+  const transferBtn = document.getElementById('btnOpenTransferFromStats');
+  if (transferBtn) {
+    transferBtn.addEventListener('click', function () {
+      closeModal('modalStats');
+      openModal('modalTransfer');
+      resetTransferForm();
+    });
+  }
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
@@ -1397,7 +1583,7 @@ function showToast(text, type) {
   const toast = document.createElement('div');
   toast.className = 'toast toast-' + type;
 
-  let iconChar = 'ℹ';
+  let iconChar = 'i';
   if (type === 'success') iconChar = '✓';
   else if (type === 'award') iconChar = '★';
   else if (type === 'danger') iconChar = '!';
@@ -1436,11 +1622,8 @@ function closeModal(id) {
   const modal = document.getElementById(id);
   if (modal) {
     modal.classList.add('is-hidden');
-    /* بررسی اینکه آیا مودال دیگری باز است */
     const stillOpen = document.querySelector('.modal:not(.is-hidden)');
-    if (!stillOpen) {
-      document.body.style.overflow = '';
-    }
+    if (!stillOpen) document.body.style.overflow = '';
   }
 }
 
@@ -1452,6 +1635,344 @@ function closeAllModals() {
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
+   انتقال پیشرفت (Export / Import)
+   ─────────────────────────────────────────────────────────────────────────── */
+
+function resetTransferForm() {
+  const exportArea = document.getElementById('exportCode');
+  const importArea = document.getElementById('importCode');
+  const copyBtn = document.getElementById('btnCopyExport');
+  if (exportArea) exportArea.value = '';
+  if (importArea) importArea.value = '';
+  if (copyBtn) copyBtn.disabled = true;
+}
+
+function generateExportCode() {
+  try {
+    const payload = {
+      v: 3,
+      xp: gameState.xp,
+      level: gameState.level,
+      wisdom: gameState.wisdom,
+      completedChapters: gameState.completedChapters,
+      currentChapterId: gameState.currentChapterId,
+      unlockedAwards: gameState.unlockedAwards,
+      bookmarkedChapters: gameState.bookmarkedChapters,
+      notes: gameState.notes,
+      challengeWins: gameState.challengeWins,
+      totalCorrect: gameState.totalCorrect,
+      totalAnswered: gameState.totalAnswered,
+      exportedAt: Date.now()
+    };
+    const json = JSON.stringify(payload);
+    /* کدگذاری به base64 سازگار با یونیکد */
+    const b64 = btoa(unescape(encodeURIComponent(json)));
+    return 'TKB1:' + b64;
+  } catch (e) {
+    return '';
+  }
+}
+
+function decodeImportCode(code) {
+  if (!code) return null;
+  const trimmed = code.trim();
+  if (trimmed.indexOf('TKB1:') !== 0) return null;
+  const b64 = trimmed.slice(5);
+  try {
+    const json = decodeURIComponent(escape(atob(b64)));
+    const data = JSON.parse(json);
+    if (!data || typeof data !== 'object') return null;
+    return data;
+  } catch (e) {
+    return null;
+  }
+}
+
+function applyImportedState(data) {
+  if (!data) return false;
+
+  const fresh = createInitialState();
+  if (typeof data.xp === 'number') fresh.xp = data.xp;
+  if (typeof data.level === 'number') fresh.level = data.level;
+  if (typeof data.wisdom === 'number') fresh.wisdom = data.wisdom;
+  fresh.completedChapters = sanitizeArrayIds(data.completedChapters);
+  if (typeof data.currentChapterId === 'string' && CHAPTERS_DATA.some(function (c) { return c.id === data.currentChapterId; })) {
+    fresh.currentChapterId = data.currentChapterId;
+  }
+  if (Array.isArray(data.unlockedAwards)) fresh.unlockedAwards = data.unlockedAwards.slice();
+  fresh.bookmarkedChapters = sanitizeArrayIds(data.bookmarkedChapters);
+  fresh.notes = sanitizeNotes(data.notes);
+  if (typeof data.challengeWins === 'number') fresh.challengeWins = data.challengeWins;
+  if (typeof data.totalCorrect === 'number') fresh.totalCorrect = data.totalCorrect;
+  if (typeof data.totalAnswered === 'number') fresh.totalAnswered = data.totalAnswered;
+
+  /* بازمحاسبه‌ی سطح */
+  let lvl = 1;
+  while (fresh.xp >= lvl * XP_PER_LEVEL && lvl < 999) lvl++;
+  fresh.level = lvl;
+
+  gameState = fresh;
+  persistState();
+  return true;
+}
+
+function handleGenerateExport() {
+  const code = generateExportCode();
+  const exportArea = document.getElementById('exportCode');
+  const copyBtn = document.getElementById('btnCopyExport');
+  if (exportArea) exportArea.value = code;
+  if (copyBtn) copyBtn.disabled = !code;
+  if (code) {
+    SoundFx.play('open');
+    showToast('کد خروجی ساخته شد؛ حالا آن را کپی کنید', 'success');
+  } else {
+    showToast('خطا در ساخت کد خروجی', 'danger');
+  }
+}
+
+function handleCopyExport() {
+  const exportArea = document.getElementById('exportCode');
+  if (!exportArea || !exportArea.value) return;
+  exportArea.select();
+  exportArea.setSelectionRange(0, exportArea.value.length);
+  try {
+    const ok = document.execCommand('copy');
+    if (ok) {
+      SoundFx.play('click');
+      showToast('کد در حافظه کپی شد', 'success');
+    } else {
+      showToast('کپی خودکار ممکن نشد؛ دستی کپی کنید', 'info');
+    }
+  } catch (e) {
+    showToast('کپی خودکار ممکن نشد؛ دستی کپی کنید', 'info');
+  }
+}
+
+function handleImportState() {
+  const importArea = document.getElementById('importCode');
+  if (!importArea || !importArea.value.trim()) {
+    showToast('لطفاً کد خروجی را وارد کنید', 'danger');
+    return;
+  }
+  const data = decodeImportCode(importArea.value);
+  if (!data) {
+    showToast('کد وارد‌شده معتبر نیست', 'danger');
+    SoundFx.play('fail');
+    return;
+  }
+  const ok = applyImportedState(data);
+  if (ok) {
+    SoundFx.play('award');
+    showToast('پیشرفت با موفقیت وارد شد', 'success');
+    closeAllModals();
+    renderChaptersGrid();
+    refreshStatsUI();
+    showView('hub');
+    importArea.value = '';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else {
+    showToast('خطا در بارگذاری پیشرفت', 'danger');
+  }
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   چالش روزانه
+   ─────────────────────────────────────────────────────────────────────────── */
+
+function updateDailyChallengeButton() {
+  const btn = document.getElementById('btnDailyChallenge');
+  if (!btn) return;
+  const today = todayKey();
+  const isAvailable = gameState.challengeLastDate !== today;
+  if (isAvailable) {
+    btn.classList.remove('is-disabled');
+    btn.removeAttribute('disabled');
+    btn.style.opacity = '1';
+  } else {
+    btn.classList.add('is-disabled');
+    btn.setAttribute('disabled', 'disabled');
+    btn.style.opacity = '0.55';
+  }
+}
+
+function buildDailyChallenge() {
+  /* فصل‌های پاسخ‌داده‌شده را برای انتخاب سؤال بگیر */
+  const answeredChapters = CHAPTERS_DATA.filter(function (c) {
+    return gameState.completedChapters.indexOf(c.id) !== -1;
+  });
+  if (answeredChapters.length === 0) return null;
+
+  const chapter = pickRandom(answeredChapters);
+  const optionIdx = Math.floor(Math.random() * chapter.options.length);
+  const option = chapter.options[optionIdx];
+
+  return {
+    chapter: chapter,
+    question: chapter.question,
+    context: chapter.summary,
+    correctText: option.text,
+    isHistorical: option.isHistorical,
+    feedback: option.feedback,
+    xpGain: option.xpGain,
+    wisdomGain: option.wisdomGain
+  };
+}
+
+function openDailyChallenge() {
+  const today = todayKey();
+  if (gameState.challengeLastDate === today) {
+    renderChallengeAlreadyDone();
+    openModal('modalChallenge');
+    return;
+  }
+
+  currentChallenge = buildDailyChallenge();
+  if (!currentChallenge) {
+    showToast('برای شرکت در چالش، ابتدا حداقل یک فصل را کامل کنید', 'info');
+    return;
+  }
+
+  renderChallengeBody();
+  openModal('modalChallenge');
+}
+
+function renderChallengeAlreadyDone() {
+  const container = document.getElementById('challengeBody');
+  if (!container) return;
+  container.innerHTML =
+    '<div class="challenge-already">' +
+      '<div class="challenge-already-icon">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 6L9 17l-5-5"/></svg>' +
+      '</div>' +
+      '<h4 class="challenge-already-title">چالش امروز را انجام داده‌اید</h4>' +
+      '<p class="challenge-already-text">فردا دوباره سر بزنید؛ چالش تازه‌ای برای شما آماده خواهد بود.</p>' +
+    '</div>';
+}
+
+function renderChallengeBody() {
+  const container = document.getElementById('challengeBody');
+  if (!container) return;
+  if (!currentChallenge) return;
+
+  const c = currentChallenge;
+
+  container.innerHTML =
+    '<div class="challenge-intro">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>' +
+      '<span>امروز یک پرسش تصادفی از فصل‌های گشوده‌شده. با پاسخ درست، پاداش ویژه بگیرید.</span>' +
+    '</div>' +
+    '<div class="challenge-question-box">' +
+      '<span class="challenge-meta">' + escapeHtml(c.chapter.period) + ' • ' + escapeHtml(c.chapter.title) + '</span>' +
+      '<p class="challenge-question">' + escapeHtml(c.question) + '</p>' +
+      '<p class="challenge-context">' + escapeHtml(c.context) + '</p>' +
+    '</div>' +
+    '<div class="challenge-options" id="challengeOptions"></div>' +
+    '<div id="challengeResultHolder"></div>';
+
+  const optionsBox = document.getElementById('challengeOptions');
+  /* سه گزینه: درست + دو گزینه‌ی اشتباه */
+  const wrongOptions = [];
+  /* ابتدا گزینه‌های اشتباه خود فصل */
+  c.chapter.options.forEach(function (opt) {
+    if (opt.text !== c.correctText) wrongOptions.push(opt);
+  });
+  /* اگر از یک فصل کمتر از ۲ اشتباه داشت، از فصل‌های دیگر برداریم */
+  if (wrongOptions.length < 2) {
+    CHAPTERS_DATA.forEach(function (ch) {
+      if (ch.id !== c.chapter.id) {
+        ch.options.forEach(function (opt) {
+          if (wrongOptions.length < 2) wrongOptions.push(opt);
+        });
+      }
+    });
+  }
+
+  const choices = [
+    { text: c.correctText, isCorrect: true },
+    { text: wrongOptions[0].text, isCorrect: false },
+    { text: wrongOptions[1].text, isCorrect: false }
+  ];
+
+  /* بر هم زدن ترتیب */
+  for (let i = choices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = choices[i]; choices[i] = choices[j]; choices[j] = tmp;
+  }
+
+  choices.forEach(function (choice, idx) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'option-btn';
+    btn.innerHTML =
+      '<span class="option-num">' + toPersianNum(idx + 1) + '</span>' +
+      '<span class="option-text">' + escapeHtml(choice.text) + '</span>';
+    btn.addEventListener('click', function () {
+      handleChallengeAnswer(choice.isCorrect);
+    });
+    optionsBox.appendChild(btn);
+  });
+}
+
+function handleChallengeAnswer(isCorrect) {
+  if (!currentChallenge) return;
+
+  const optionButtons = document.querySelectorAll('#challengeOptions .option-btn');
+  optionButtons.forEach(function (b) { b.disabled = true; });
+
+  const today = todayKey();
+  gameState.challengeLastDate = today;
+  gameState.challengeAnsweredToday = true;
+
+  let rewardXp = 0;
+  let rewardWisdom = 0;
+
+  if (isCorrect) {
+    gameState.challengeWins = (gameState.challengeWins || 0) + 1;
+    rewardXp = 60;
+    rewardWisdom = 15;
+    gameState.xp += rewardXp;
+    gameState.wisdom += rewardWisdom;
+    gameState.totalCorrect++;
+    gameState.totalAnswered++;
+    SoundFx.play('award');
+  } else {
+    rewardXp = 15;
+    rewardWisdom = 5;
+    gameState.xp += rewardXp;
+    gameState.wisdom += rewardWisdom;
+    gameState.totalAnswered++;
+    SoundFx.play('learn');
+  }
+
+  recalcLevel(1);
+  evaluateAwards();
+  persistState();
+
+  const holder = document.getElementById('challengeResultHolder');
+  if (holder) {
+    holder.innerHTML =
+      '<div class="challenge-result ' + (isCorrect ? 'is-correct' : 'is-wrong') + '">' +
+        '<div class="challenge-result-head">' +
+          (isCorrect
+            ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 6L9 17l-5-5"/></svg>'
+            : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 9v4M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg>') +
+          '<span>' + (isCorrect ? 'پاسخ درست!' : 'پاسخ دور از واقعیت بود') + '</span>' +
+        '</div>' +
+        '<p class="challenge-result-body">' + escapeHtml(currentChallenge.feedback) + '</p>' +
+        '<div class="challenge-reward-line">' +
+          '<span>+' + toPersianNum(rewardXp) + ' امتیاز تجربه</span>' +
+          '<span>+' + toPersianNum(rewardWisdom) + ' امتیاز بصیرت</span>' +
+        '</div>' +
+      '</div>';
+    setTimeout(function () {
+      holder.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 100);
+  }
+
+  updateDailyChallengeButton();
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
    بازنشانی پیشرفت
    ─────────────────────────────────────────────────────────────────────────── */
 
@@ -1459,38 +1980,29 @@ function resetProgress() {
   try {
     localStorage.removeItem(STORAGE_KEY);
     localStorage.removeItem(LEGACY_STORAGE_KEY);
-  } catch (e) {
-    /* نادیده گرفته می‌شود */
-  }
+  } catch (e) {}
 
-  const prevAwardCount = gameState.unlockedAwards.length;
   gameState = createInitialState();
   currentChapterCache = null;
+  currentChallenge = null;
   persistState();
   renderChaptersGrid();
   showView('hub');
   closeAllModals();
 
-  /* بازنشانی چیپ فیلتر */
   document.querySelectorAll('.era-tab').forEach(function (t) {
     t.classList.toggle('is-active', t.getAttribute('data-era') === 'all');
   });
 
   SoundFx.play('open');
   showToast('سفر تاریخی شما از نو آغاز شد', 'info');
-  if (prevAwardCount > 0) {
-    setTimeout(function () {
-      showToast('همه‌ی مدال‌ها و سطوح بازنشانی شدند', 'danger');
-    }, 600);
-  }
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   راه‌اندازی و اتصال رویدادها
+   رویدادها
    ─────────────────────────────────────────────────────────────────────────── */
 
 function bindHeaderActions() {
-  /* دانشنامه */
   const btnCodex = document.getElementById('btnOpenCodex');
   if (btnCodex) {
     btnCodex.addEventListener('click', function () {
@@ -1499,7 +2011,6 @@ function bindHeaderActions() {
     });
   }
 
-  /* نقشه‌ی سلسله‌ها */
   const btnDynasty = document.getElementById('btnOpenDynasty');
   if (btnDynasty) {
     btnDynasty.addEventListener('click', function () {
@@ -1509,7 +2020,6 @@ function bindHeaderActions() {
     });
   }
 
-  /* مدال‌ها */
   const btnAwards = document.getElementById('btnOpenAwards');
   if (btnAwards) {
     btnAwards.addEventListener('click', function () {
@@ -1519,7 +2029,6 @@ function bindHeaderActions() {
     });
   }
 
-  /* آمار */
   const btnStats = document.getElementById('btnOpenStats');
   if (btnStats) {
     btnStats.addEventListener('click', function () {
@@ -1529,7 +2038,6 @@ function bindHeaderActions() {
     });
   }
 
-  /* صدا */
   const btnSound = document.getElementById('btnSound');
   if (btnSound) {
     btnSound.addEventListener('click', function () {
@@ -1543,7 +2051,6 @@ function bindHeaderActions() {
     });
   }
 
-  /* بازنشانی */
   const btnReset = document.getElementById('btnReset');
   if (btnReset) {
     btnReset.addEventListener('click', function () {
@@ -1552,7 +2059,6 @@ function bindHeaderActions() {
     });
   }
 
-  /* تأیید بازنشانی */
   const btnConfirmReset = document.getElementById('btnConfirmReset');
   if (btnConfirmReset) {
     btnConfirmReset.addEventListener('click', resetProgress);
@@ -1560,7 +2066,6 @@ function bindHeaderActions() {
 }
 
 function bindModalCloseHandlers() {
-  /* دکمه‌های بستن و backdrop */
   document.querySelectorAll('[data-close-modal]').forEach(function (el) {
     el.addEventListener('click', function () {
       const targetId = el.getAttribute('data-close-modal');
@@ -1568,25 +2073,20 @@ function bindModalCloseHandlers() {
     });
   });
 
-  /* کلید Escape */
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
       const openModalEl = document.querySelector('.modal:not(.is-hidden)');
-      if (openModalEl) {
-        closeModal(openModalEl.id);
-      }
+      if (openModalEl) closeModal(openModalEl.id);
     }
   });
 }
 
 function bindStoryActions() {
-  /* بازگشت به نقشه */
   const btnBack = document.getElementById('btnBackToMap');
   if (btnBack) {
     btnBack.addEventListener('click', backToChronicleHub);
   }
 
-  /* منبع علمی فصل */
   const btnSource = document.getElementById('btnViewChapterSource');
   if (btnSource) {
     btnSource.addEventListener('click', function () {
@@ -1594,24 +2094,57 @@ function bindStoryActions() {
       openModal('modalCodex');
     });
   }
+
+  const btnBookmark = document.getElementById('btnBookmark');
+  if (btnBookmark) {
+    btnBookmark.addEventListener('click', function () {
+      if (currentChapterCache) {
+        toggleBookmark(currentChapterCache.id);
+      }
+    });
+  }
+
+  /* یادداشت با ذخیره‌ی خودکار (debounced) */
+  const notesInput = document.getElementById('notesInput');
+  if (notesInput) {
+    let saveTimer = null;
+    notesInput.addEventListener('input', function () {
+      const chapterId = notesInput.dataset.chapterId;
+      if (!chapterId) return;
+      if (saveTimer) clearTimeout(saveTimer);
+      saveTimer = setTimeout(function () {
+        saveChapterNote(chapterId, notesInput.value);
+      }, 600);
+    });
+    notesInput.addEventListener('blur', function () {
+      const chapterId = notesInput.dataset.chapterId;
+      if (!chapterId) return;
+      if (saveTimer) clearTimeout(saveTimer);
+      saveChapterNote(chapterId, notesInput.value);
+    });
+  }
 }
 
 function bindHubActions() {
-  /* ادامه‌ی سریع */
   const btnContinue = document.getElementById('btnQuickContinue');
   if (btnContinue) {
     btnContinue.addEventListener('click', function () {
       SoundFx.play('open');
       const next = findNextSuggestedChapter();
-      if (next) {
-        openChapterStory(next.id);
-      } else {
-        showToast('همه‌ی فصل‌ها پیموده شده‌اند', 'info');
-      }
+      if (next) openChapterStory(next.id);
+      else showToast('همه‌ی فصل‌ها پیموده شده‌اند', 'info');
     });
   }
 
-  /* تب‌های فیلتر دوره */
+  const btnChallenge = document.getElementById('btnDailyChallenge');
+  if (btnChallenge) {
+    btnChallenge.addEventListener('click', function () {
+      SoundFx.play('click');
+      openDailyChallenge();
+    });
+  }
+
+  /* تب‌های فیلتر */
   const tabs = document.querySelectorAll('.era-tab');
   tabs.forEach(function (tab) {
     tab.addEventListener('click', function () {
@@ -1627,6 +2160,34 @@ function bindHubActions() {
       renderChaptersGrid();
     });
   });
+
+  /* سوییچ کارت/نقشه */
+  const viewBtns = document.querySelectorAll('.view-toggle-btn');
+  viewBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const view = btn.getAttribute('data-view');
+      gameState.viewMode = view;
+      persistState();
+
+      viewBtns.forEach(function (b) {
+        b.classList.toggle('is-active', b === btn);
+      });
+
+      SoundFx.play('click');
+      renderChaptersGrid();
+    });
+  });
+}
+
+function bindTransferActions() {
+  const btnGen = document.getElementById('btnGenerateExport');
+  if (btnGen) btnGen.addEventListener('click', handleGenerateExport);
+
+  const btnCopy = document.getElementById('btnCopyExport');
+  if (btnCopy) btnCopy.addEventListener('click', handleCopyExport);
+
+  const btnImp = document.getElementById('btnImportState');
+  if (btnImp) btnImp.addEventListener('click', handleImportState);
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
@@ -1636,10 +2197,16 @@ function bindHubActions() {
 function initApp() {
   loadSavedState();
 
-  /* همگام‌سازی تب فعال با حالت ذخیره‌شده */
+  /* همگام‌سازی تب فعال */
   const tabs = document.querySelectorAll('.era-tab');
   tabs.forEach(function (t) {
     t.classList.toggle('is-active', t.getAttribute('data-era') === gameState.activeEra);
+  });
+
+  /* همگام‌سازی حالت نمایش */
+  const viewBtns = document.querySelectorAll('.view-toggle-btn');
+  viewBtns.forEach(function (b) {
+    b.classList.toggle('is-active', b.getAttribute('data-view') === gameState.viewMode);
   });
 
   refreshStatsUI();
@@ -1648,11 +2215,11 @@ function initApp() {
   bindModalCloseHandlers();
   bindStoryActions();
   bindHubActions();
+  bindTransferActions();
 
-  /* نمایش دیدگاه نخست */
   showView('hub');
 
-  /* فعال‌سازی صدای Web Audio با اولین تعامل کاربر */
+  /* فعال‌سازی صدای Web Audio با اولین تعامل */
   const unlockAudio = function () {
     SoundFx.init();
     SoundFx.resume();
@@ -1662,16 +2229,13 @@ function initApp() {
   document.addEventListener('pointerdown', unlockAudio, { once: false });
   document.addEventListener('keydown', unlockAudio, { once: false });
 
-  /* به‌روزرسانی سالانه‌ی آمار بازدید */
+  /* شمارش بازدیدها */
   try {
     const savedVisits = parseInt(localStorage.getItem('tarikhban_visits') || '0', 10) || 0;
     localStorage.setItem('tarikhban_visits', String(savedVisits + 1));
-  } catch (e) {
-    /* نادیده گرفته می‌شود */
-  }
+  } catch (e) {}
 }
 
-/* اجرا پس از بارگذاری کامل DOM */
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initApp);
 } else {
