@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="theme-color" content="#16213e">
+  <meta name="description" content="تاریخ‌بان: روایت زنده‌ی سرنوشت ایران‌زمین — پیمایش تعاملی دوره‌های تاریخی ایران بر پایه‌ی اسناد آکادمیک">
+  <title>تاریخ‌بان | روایت زنده‌ی ایران‌زمین</title>
+
+  <!-- Persian Typography: Amiri (headings), Estedad (UI), Vazirmatn (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Estedad:wght@400;500;600;700;800&family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Favicon (inline SVG for zero-latency) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2316213e'/><path d='M16 5 L26 16 L16 27 L6 16 Z' fill='none' stroke='%23c9a227' stroke-width='2'/><circle cx='16' cy='16' r='3' fill='%23c9a227'/></svg>">
+</head>
+
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       DECORATIVE BACKGROUND LAYER (Girih pattern + ambient glow)
+       ═══════════════════════════════════════════════════════════ -->
+  <div class="bg-layer" aria-hidden="true">
+    <div class="bg-pattern"></div>
+    <div class="bg-vignette"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SITE HEADER — Brand, Stats, Actions
+       ═══════════════════════════════════════════════════════════ -->
+  <header class="site-header" role="banner">
+    <div class="header-inner">
+
+      <!-- Brand block -->
+      <div class="brand-block">
+        <div class="brand-emblem" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="emblemGold" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#f0d886"/>
+                <stop offset="0.55" stop-color="#c9a227"/>
+                <stop offset="1" stop-color="#8a6d1f"/>
+              </linearGradient>
+            </defs>
+            <path d="M24 4 L42 24 L24 44 L6 24 Z" fill="none" stroke="url(#emblemGold)" stroke-width="1.6"/>
+            <path d="M24 11 L35 24 L24 37 L13 24 Z" fill="none" stroke="url(#emblemGold)" stroke-width="1" opacity="0.7"/>
+            <circle cx="24" cy="24" r="3.6" fill="url(#emblemGold)"/>
+            <path d="M24 4 L24 0 M24 48 L24 44 M4 24 L0 24 M48 24 L44 24" stroke="url(#emblemGold)" stroke-width="1.4"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1 class="brand-name">تاریخ‌بان</h1>
+          <p class="brand-tagline">روایت زنده‌ی سرنوشت ایران‌زمین</p>
+        </div>
+      </div>
+
+      <!-- Journey stats -->
+      <div class="journey-stats">
+
+        <div class="stat-pill stat-level" title="سطح دانش تاریخی شما">
+          <div class="stat-content">
+            <div class="stat-row">
+              <span id="playerTitle" class="stat-title">کاوشگر تازه‌کار</span>
+              <span id="playerLevelBadge" class="stat-value">سطح ۱</span>
+            </div>
+            <div class="stat-progress">
+              <div id="playerXpBar" class="stat-progress-fill" style="width:0%"></div>
+            </div>
+          </div>
+          <span id="playerXpText" class="stat-xp">۰ XP</span>
+        </div>
+
+        <div class="stat-pill stat-wisdom" title="امتیاز بصیرت تاریخی">
+          <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M4 4h10a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3V4z"/>
+            <path d="M17 7h3v13H7"/>
+            <path d="M8 9h6M8 13h6"/>
+          </svg>
+          <span id="wisdomBadge" class="stat-value">۰</span>
+        </div>
+
+      </div>
+
+      <!-- Header actions -->
+      <div class="header-actions">
+        <button id="btnOpenCodex" class="icon-btn" aria-label="دانشنامه و منابع علمی" title="دانشنامه و منابع علمی">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M12 6.5v13m0-13C10.8 5.5 9.2 5 7.5 5S4.2 5.5 3 6.5v13C4.2 18.5 5.8 18 7.5 18s3.3.5 4.5 1.5m0-13C13.2 5.5 14.8 5 16.5 5s3.3.5 4.5 1.5v13c-1.2-1-2.8-1.5-4.5-1.5s-3.3.5-4.5 1.5"/>
+          </svg>
+        </button>
+
+        <button id="btnOpenDynasty" class="icon-btn" aria-label="نقشه‌ی سلسله‌ها" title="نقشه‌ی سلسله‌های ایران">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <rect x="9" y="3" width="6" height="4" rx="0.8"/>
+            <rect x="2" y="17" width="6" height="4" rx="0.8"/>
+            <rect x="16" y="17" width="6" height="4" rx="0.8"/>
+            <path d="M12 7v4M12 11H5v6M12 11h7v6"/>
+          </svg>
+        </button>
+
+        <button id="btnOpenAwards" class="icon-btn" aria-label="مدال‌ها و دستاوردها" title="مدال‌ها و دستاوردها">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <circle cx="12" cy="9" r="5"/>
+            <path d="M9 13l-2 8 5-3 5 3-2-8"/>
+            <path d="M12 6.5l.9 1.9 2.1.3-1.5 1.5.4 2.1-1.9-1-1.9 1 .4-2.1-1.5-1.5 2.1-.3z"/>
+          </svg>
+        </button>
+
+        <button id="btnOpenStats" class="icon-btn" aria-label="جدول امتیازات" title="جدول امتیازات و آمار">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/>
+          </svg>
+        </button>
+
+        <button id="btnSound" class="icon-btn" aria-label="صدا" title="روشن/خاموش کردن صدا">
+          <svg id="soundOnIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M3 10v4h4l5 4V6L7 10H3z"/>
+            <path d="M16 8a5 5 0 0 1 0 8M19 5a9 9 0 0 1 0 14"/>
+          </svg>
+          <svg id="soundOffIcon" class="is-hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M3 10v4h4l5 4V6L7 10H3z"/>
+            <path d="M22 9l-6 6M16 9l6 6"/>
+          </svg>
+        </button>
+
+        <button id="btnReset" class="icon-btn icon-btn-danger" aria-label="بازنشانی" title="بازنشانی کل سفر">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M3 12a9 9 0 1 0 3-6.7L3 8"/>
+            <path d="M3 3v5h5"/>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       MAIN CONTENT
+       ═══════════════════════════════════════════════════════════ -->
+  <main class="site-main">
+
+    <!-- ─────────────── VIEW 1: HUB ─────────────── -->
+    <section id="viewHub" class="view view-hub">
+
+      <!-- HERO: two-column scenic + progress widget -->
+      <div class="hero-grid">
+
+        <!-- Left: Scenic narrative call -->
+        <article class="hero-scene">
+          <div class="hero-scene-bg" aria-hidden="true">
+            <svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#0a1224"/>
+                  <stop offset="0.4" stop-color="#16213e"/>
+                  <stop offset="1" stop-color="#2c3e6b"/>
+                </linearGradient>
+                <radialGradient id="sunGlow" cx="0.75" cy="0.35" r="0.35">
+                  <stop offset="0" stop-color="#f0d886" stop-opacity="0.55"/>
+                  <stop offset="1" stop-color="#f0d886" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <rect width="800" height="500" fill="url(#skyGrad)"/>
+              <circle cx="600" cy="175" r="180" fill="url(#sunGlow)"/>
+              <!-- Distant mountains -->
+              <path d="M0 380 L120 300 L220 340 L340 280 L460 330 L580 270 L720 320 L800 300 L800 500 L0 500 Z" fill="#0e1930" opacity="0.85"/>
+              <path d="M0 420 L150 360 L280 400 L420 350 L560 390 L700 350 L800 380 L800 500 L0 500 Z" fill="#0a1224" opacity="0.9"/>
+              <!-- Persepolis silhouette -->
+              <g fill="#060b18" opacity="0.95">
+                <rect x="180" y="400" width="440" height="20"/>
+                <rect x="200" y="380" width="30" height="20"/>
+                <rect x="250" y="380" width="30" height="20"/>
+                <rect x="300" y="380" width="30" height="20"/>
+                <rect x="350" y="380" width="30" height="20"/>
+                <rect x="400" y="380" width="30" height="20"/>
+                <rect x="450" y="380" width="30" height="20"/>
+                <rect x="500" y="380" width="30" height="20"/>
+                <rect x="550" y="380" width="30" height="20"/>
+                <path d="M190 380 L220 340 L250 380 Z"/>
+                <path d="M350 380 L400 330 L450 380 Z"/>
+                <path d="M550 380 L580 340 L610 380 Z"/>
+              </g>
+            </svg>
+          </div>
+
+          <div class="hero-scene-content">
+            <div class="hero-kicker">
+              <span class="hero-kicker-dot"></span>
+              <span>پیمایش زنده‌ی رویدادهای سرنوشت‌ساز تاریخ ایران</span>
+            </div>
+
+            <h2 class="hero-title">
+              در دل گفت‌وگوهای ناگفته‌ی<br>
+              <em>تاریخ ایران</em> قدم بگذارید
+            </h2>
+
+            <p class="hero-lede">
+              تاریخ، مجموعه‌ای از سال و نام در کتاب‌های درسی نیست؛ تاریخ سلسله‌ای از نبردهای ذهن،
+              مذاکرات محرمانه، خیانت‌های درباری و دوراهی‌های سهمگینی است که سرنوشت این سرزمین را
+              رقم زده. در نقش وزیر، سردار و شاه، تصمیم بگیرید و ببینید تاریخ واقعاً چگونه رقم خورد.
+            </p>
+
+            <ul class="hero-features">
+              <li><span class="feat-mark"></span> بازسازی گفت‌وگوها بر پایه‌ی منابع دست‌اول</li>
+              <li><span class="feat-mark"></span> ارجاع به دانشنامه ایرانیکا، تاریخ کمبریج و کتیبه‌ها</li>
+              <li><span class="feat-mark"></span> بدون سوگیری سیاسی، با نگاه آکادمیک</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Right: Timeline / progress widget -->
+        <aside class="hero-widget">
+          <header class="widget-head">
+            <span class="widget-label">گاه‌شمار پیشرفت تمدنی</span>
+            <span id="hubProgressBadge" class="widget-counter">۰ از ۲۰ فصل گشوده شده</span>
+          </header>
+
+          <div class="widget-spotlight">
+            <span class="widget-sublabel">ماموریت پیشنهادی:</span>
+            <h3 id="spotlightTitle" class="widget-spotlight-title">قیام کوروش و خیانت هارپاگ</h3>
+            <p id="spotlightDesc" class="widget-spotlight-desc">
+              گفت‌وگوی مخفیانه‌ی فرمانده ماد با کوروش؛ نقطه‌ی عطفِ زایش شاهنشاهی پارس.
+            </p>
+          </div>
+
+          <div class="widget-meter">
+            <div class="widget-meter-head">
+              <span>تراز آگاهی تاریخی</span>
+              <span id="widgetWisdomRatio" class="widget-meter-value">۰٪</span>
+            </div>
+            <div class="widget-meter-bar">
+              <div id="widgetWisdomBar" class="widget-meter-fill" style="width:0%"></div>
+            </div>
+          </div>
+
+          <button id="btnQuickContinue" class="btn btn-primary btn-block">
+            <span>ادامه‌ی سفر تاریخی</span>
+            <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M19 12H5M12 5l-7 7 7 7"/>
+            </svg>
+          </button>
+        </aside>
+
+      </div>
+
+      <!-- ERA SELECTOR -->
+      <section class="era-section">
+        <header class="section-head">
+          <div class="section-head-line"></div>
+          <h3 class="section-title">دوره‌های سرنوشت‌ساز ایران</h3>
+          <div class="section-head-line"></div>
+        </header>
+        <p class="section-lede">
+          از عیلام باستان تا دوران معاصر؛ هر دوره یک فصل، هر فصل یک دوراهی تاریخی.
+        </p>
+
+        <!-- Era filter tabs -->
+        <nav class="era-tabs" id="eraTabs" aria-label="فیلتر دوره‌های تاریخی">
+          <button class="era-tab is-active" data-era="all">همه‌ی دوره‌ها</button>
+          <button class="era-tab" data-era="ancient">باستان</button>
+          <button class="era-tab" data-era="classical">میانه</button>
+          <button class="era-tab" data-era="islamic">دوره‌ی اسلامی</button>
+          <button class="era-tab" data-era="modern">معاصر</button>
+        </nav>
+
+        <!-- Chapter grid -->
+        <div id="chaptersGrid" class="chapters-grid"></div>
+
+        <!-- Empty state -->
+        <div id="chaptersEmpty" class="empty-state is-hidden">
+          <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="32" cy="32" r="26"/>
+            <path d="M32 14v36M14 32h36"/>
+          </svg>
+          <p>فصلی در این دوره یافت نشد.</p>
+        </div>
+      </section>
+
+    </section>
+
+    <!-- ─────────────── VIEW 2: STORY ─────────────── -->
+    <section id="viewStory" class="view view-story is-hidden">
+
+      <!-- Story toolbar -->
+      <div class="story-toolbar">
+        <button id="btnBackToMap" class="btn btn-ghost btn-sm">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M19 12H5M12 5l-7 7 7 7"/>
+          </svg>
+          <span>نقشه‌ی فصل‌ها</span>
+        </button>
+
+        <div class="story-toolbar-title">
+          <span id="storyEraTag" class="story-era-tag">فصل اول • ۵۵۰ پیش از میلاد</span>
+          <h2 id="storyEraTitle" class="story-era-title">انقراض مادها و برآمدن هخامنشیان</h2>
+        </div>
+
+        <button id="btnViewChapterSource" class="btn btn-outline btn-sm">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M12 6.5v13m0-13C10.8 5.5 9.2 5 7.5 5S4.2 5.5 3 6.5v13C4.2 18.5 5.8 18 7.5 18s3.3.5 4.5 1.5m0-13C13.2 5.5 14.8 5 16.5 5s3.3.5 4.5 1.5v13c-1.2-1-2.8-1.5-4.5-1.5s-3.3.5-4.5 1.5"/>
+          </svg>
+          <span>منبع علمی این رویداد</span>
+        </button>
+      </div>
+
+      <!-- Story stage -->
+      <article class="story-stage">
+
+        <!-- Scene context ribbon -->
+        <div class="scene-context">
+          <svg class="scene-context-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/>
+          </svg>
+          <div>
+            <span class="scene-context-label">بستر تاریخی صحنه:</span>
+            <p id="storySceneContext" class="scene-context-text">در حال بارگذاری...</p>
+          </div>
+        </div>
+
+        <!-- Speakers -->
+        <div class="speakers-grid">
+
+          <div id="charCardA" class="speaker-card speaker-card-a">
+            <div class="speaker-frame">
+              <svg class="speaker-arch" viewBox="0 0 80 90" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M0 90 L0 30 Q40 -10 80 30 L80 90 Z" fill="none" stroke="currentColor" stroke-width="1.2"/>
+              </svg>
+              <div id="charAvatarA" class="speaker-sigil">◇</div>
+            </div>
+            <div class="speaker-meta">
+              <h4 id="charNameA" class="speaker-name">—</h4>
+              <p id="charRoleA" class="speaker-role">—</p>
+            </div>
+          </div>
+
+          <div class="speakers-divider" aria-hidden="true">
+            <span class="divider-line"></span>
+            <span class="divider-diamond"></span>
+            <span class="divider-line"></span>
+            <span class="divider-caption">روایت زنده</span>
+            <span class="divider-line"></span>
+            <span class="divider-diamond"></span>
+            <span class="divider-line"></span>
+          </div>
+
+          <div id="charCardB" class="speaker-card speaker-card-b">
+            <div class="speaker-frame">
+              <svg class="speaker-arch" viewBox="0 0 80 90" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M0 90 L0 30 Q40 -10 80 30 L80 90 Z" fill="none" stroke="currentColor" stroke-width="1.2"/>
+              </svg>
+              <div id="charAvatarB" class="speaker-sigil">◆</div>
+            </div>
+            <div class="speaker-meta">
+              <h4 id="charNameB" class="speaker-name">—</h4>
+              <p id="charRoleB" class="speaker-role">—</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Dialogue box -->
+        <div class="dialogue-box">
+          <header class="dialogue-head">
+            <span id="currentSpeakerLabel" class="dialogue-speaker">
+              <span class="dialogue-speaker-mark"></span>
+              در حال بارگذاری...
+            </span>
+            <span class="dialogue-source-hint">بر پایه‌ی اسناد دست‌اول</span>
+          </header>
+          <blockquote id="dialogueText" class="dialogue-quote">
+            «...»
+          </blockquote>
+          <div id="dialogueExplanation" class="dialogue-explanation is-hidden"></div>
+        </div>
+
+        <!-- Decision stage -->
+        <div class="decision-stage">
+          <header class="decision-head">
+            <h4 class="decision-title">
+              <span class="decision-mark"></span>
+              شما حدس می‌زنید راهبرد واقعی در این لحظه چه بود؟
+            </h4>
+            <span class="decision-hint">گزینه‌ی سنجیده را انتخاب کنید</span>
+          </header>
+          <div id="optionsContainer" class="options-list"></div>
+        </div>
+
+        <!-- Feedback panel -->
+        <div id="feedbackPanel" class="feedback-panel is-hidden"></div>
+
+      </article>
+
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       MODAL: CODEX (sources)
+       ═══════════════════════════════════════════════════════════ -->
+  <div id="modalCodex" class="modal is-hidden" role="dialog" aria-modal="true" aria-labelledby="codexTitle">
+    <div class="modal-backdrop" data-close-modal="modalCodex"></div>
+    <div class="modal-card modal-card-wide">
+      <header class="modal-head">
+        <div class="modal-head-left">
+          <div class="modal-emblem">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <path d="M12 6.5v13m0-13C10.8 5.5 9.2 5 7.5 5S4.2 5.5 3 6.5v13C4.2 18.5 5.8 18 7.5 18s3.3.5 4.5 1.5m0-13C13.2 5.5 14.8 5 16.5 5s3.3.5 4.5 1.5v13c-1.2-1-2.8-1.5-4.5-1.5s-3.3.5-4.5 1.5"/>
+            </svg>
+          </div>
+          <div>
+            <h3 id="codexTitle" class="modal-title">دانشنامه و اعتبار علمی محتوا</h3>
+            <p class="modal-subtitle">مبتنی بر منابع آکادمیک، کتیبه‌ها و اسناد باستان‌شناختی</p>
+          </div>
+        </div>
+        <button class="modal-close" data-close-modal="modalCodex" aria-label="بستن">&times;</button>
+      </header>
+      <div class="modal-body">
+        <div class="codex-intro">
+          <h4>چرا تاریخ‌بان افسانه‌سرایی نمی‌کند؟</h4>
+          <p>
+            در تاریخ‌نگاری نوین، گزارش‌های مورخان یونانی مانند هرودوت یا گزنفون بی‌واسطه پذیرفته نمی‌شوند؛
+            زیرا هرودوت گاه روایت‌های شفاهی عامیانه را ثبت کرده است. ما این شواهد را با کتیبه‌های بابلی،
+            پارسی باستان و پژوهش‌های بین‌المللی معتبر می‌سنجیم.
+          </p>
+        </div>
+        <div class="codex-sources">
+          <h5>منابع اصلی مورد استناد:</h5>
+          <article class="source-item">
+            <span class="source-tag">دانشنامه</span>
+            <h6>Encyclopaedia Iranica (Columbia University)</h6>
+            <p>بزرگ‌ترین دانشنامه‌ی آکادمیک ایران‌شناسی، به سریراستاری پروفسور احسان یارشاطر و صدها پژوهشگر بین‌المللی.</p>
+          </article>
+          <article class="source-item">
+            <span class="source-tag">مجموعه‌ی تاریخی</span>
+            <h6>The Cambridge History of Iran (Vols. 1–8)</h6>
+            <p>مرجع مادر تحلیل تاریخی و اجتماعی دانشگاه کمبریج در حوزه‌ی فلات ایران، از باستان تا دوران مدرن.</p>
+          </article>
+          <article class="source-item">
+            <span class="source-tag">کتیبه و سند دست‌اول</span>
+            <h6>متون و اسناد باستان‌شناختی</h6>
+            <p>کتیبه‌ی بیستون داریوش، استوانه‌ی کوروش، الواح باروی تخت‌جمشید، کتیبه‌ی کعبه‌ی زرتشت شاپور یکم، و اسناد محرمانه‌ی مشروطه و نفت.</p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       MODAL: DYNASTY MAP
+       ═══════════════════════════════════════════════════════════ -->
+  <div id="modalDynasty" class="modal is-hidden" role="dialog" aria-modal="true" aria-labelledby="dynastyTitle">
+    <div class="modal-backdrop" data-close-modal="modalDynasty"></div>
+    <div class="modal-card modal-card-wide">
+      <header class="modal-head">
+        <div class="modal-head-left">
+          <div class="modal-emblem">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <rect x="9" y="3" width="6" height="4" rx="0.8"/>
+              <rect x="2" y="17" width="6" height="4" rx="0.8"/>
+              <rect x="16" y="17" width="6" height="4" rx="0.8"/>
+              <path d="M12 7v4M12 11H5v6M12 11h7v6"/>
+            </svg>
+          </div>
+          <div>
+            <h3 id="dynastyTitle" class="modal-title">نقشه‌ی سلسله‌های ایران</h3>
+            <p class="modal-subtitle">گاه‌شمار پیوسته از عیلام تا امروز</p>
+          </div>
+        </div>
+        <button class="modal-close" data-close-modal="modalDynasty" aria-label="بستن">&times;</button>
+      </header>
+      <div class="modal-body">
+        <div id="dynastyTimeline" class="dynasty-timeline"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       MODAL: AWARDS
+       ═══════════════════════════════════════════════════════════ -->
+  <div id="modalAwards" class="modal is-hidden" role="dialog" aria-modal="true" aria-labelledby="awardsTitle">
+    <div class="modal-backdrop" data-close-modal="modalAwards"></div>
+    <div class="modal-card">
+      <header class="modal-head">
+        <div class="modal-head-left">
+          <div class="modal-emblem">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <circle cx="12" cy="9" r="5"/>
+              <path d="M9 13l-2 8 5-3 5 3-2-8"/>
+            </svg>
+          </div>
+          <div>
+            <h3 id="awardsTitle" class="modal-title">مدال‌ها و دستاوردها</h3>
+            <p class="modal-subtitle">نشان‌های تفکر انتقادی و تسلط تاریخی</p>
+          </div>
+        </div>
+        <button class="modal-close" data-close-modal="modalAwards" aria-label="بستن">&times;</button>
+      </header>
+      <div id="awardsContainer" class="modal-body awards-grid"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       MODAL: STATS
+       ═══════════════════════════════════════════════════════════ -->
+  <div id="modalStats" class="modal is-hidden" role="dialog" aria-modal="true" aria-labelledby="statsTitle">
+    <div class="modal-backdrop" data-close-modal="modalStats"></div>
+    <div class="modal-card">
+      <header class="modal-head">
+        <div class="modal-head-left">
+          <div class="modal-emblem">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/>
+            </svg>
+          </div>
+          <div>
+            <h3 id="statsTitle" class="modal-title">آمار و جدول امتیازات</h3>
+            <p class="modal-subtitle">کارنامه‌ی سفر شما در تاریخ ایران</p>
+          </div>
+        </div>
+        <button class="modal-close" data-close-modal="modalStats" aria-label="بستن">&times;</button>
+      </header>
+      <div id="statsContainer" class="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       MODAL: CONFIRM RESET
+       ═══════════════════════════════════════════════════════════ -->
+  <div id="modalConfirm" class="modal is-hidden" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+    <div class="modal-backdrop" data-close-modal="modalConfirm"></div>
+    <div class="modal-card modal-card-narrow">
+      <header class="modal-head modal-head-center">
+        <div class="modal-emblem modal-emblem-danger">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M12 9v4M12 17h.01"/>
+            <path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>
+          </svg>
+        </div>
+        <h3 id="confirmTitle" class="modal-title">بازنشانی کل سفر</h3>
+      </header>
+      <div class="modal-body modal-body-center">
+        <p>
+          با این کار، تمامی سطوح، امتیازهای بصیرت، فصل‌های فتح‌شده و مدال‌های کسب‌شده پاک می‌شوند
+          و سفر شما از ابتدا آغاز خواهد شد.
+        </p>
+        <p class="modal-body-warning">آیا مطمئن هستید؟</p>
+        <div class="modal-actions">
+          <button class="btn btn-ghost" data-close-modal="modalConfirm">انصراف</button>
+          <button id="btnConfirmReset" class="btn btn-danger">بله، از نو شروع کن</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast container -->
+  <div id="toastBox" class="toast-box" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Scripts -->
+  <script src="script.js"></script>
+</body>
+</html>
