@@ -7,35 +7,25 @@
   <meta name="description" content="تاریخ‌بان: روایت زنده‌ی سرنوشت ایران‌زمین — پیمایش تعاملی دوره‌های تاریخی ایران بر پایه‌ی اسناد آکادمیک">
   <title>تاریخ‌بان | روایت زنده‌ی ایران‌زمین</title>
 
-  <!-- Persian Typography: Amiri (headings), Estedad (UI), Vazirmatn (body) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Estedad:wght@400;500;600;700;800&family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Estedad:wght@400;500;600;700;800&family=Vazirmatn:wght@300;400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Styles -->
   <link rel="stylesheet" href="styles.css">
 
-  <!-- Favicon (inline SVG for zero-latency) -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2316213e'/><path d='M16 5 L26 16 L16 27 L6 16 Z' fill='none' stroke='%23c9a227' stroke-width='2'/><circle cx='16' cy='16' r='3' fill='%23c9a227'/></svg>">
 </head>
 
 <body>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       DECORATIVE BACKGROUND LAYER (Girih pattern + ambient glow)
-       ═══════════════════════════════════════════════════════════ -->
   <div class="bg-layer" aria-hidden="true">
     <div class="bg-pattern"></div>
     <div class="bg-vignette"></div>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       SITE HEADER — Brand, Stats, Actions
-       ═══════════════════════════════════════════════════════════ -->
   <header class="site-header" role="banner">
     <div class="header-inner">
 
-      <!-- Brand block -->
       <div class="brand-block">
         <div class="brand-emblem" aria-hidden="true">
           <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -58,7 +48,6 @@
         </div>
       </div>
 
-      <!-- Journey stats -->
       <div class="journey-stats">
 
         <div class="stat-pill stat-level" title="سطح دانش تاریخی شما">
@@ -85,7 +74,6 @@
 
       </div>
 
-      <!-- Header actions -->
       <div class="header-actions">
         <button id="btnOpenCodex" class="icon-btn" aria-label="دانشنامه و منابع علمی" title="دانشنامه و منابع علمی">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
@@ -138,18 +126,12 @@
     </div>
   </header>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       MAIN CONTENT
-       ═══════════════════════════════════════════════════════════ -->
   <main class="site-main">
 
-    <!-- ─────────────── VIEW 1: HUB ─────────────── -->
     <section id="viewHub" class="view view-hub">
 
-      <!-- HERO: two-column scenic + progress widget -->
       <div class="hero-grid">
 
-        <!-- Left: Scenic narrative call -->
         <article class="hero-scene">
           <div class="hero-scene-bg" aria-hidden="true">
             <svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
@@ -166,10 +148,8 @@
               </defs>
               <rect width="800" height="500" fill="url(#skyGrad)"/>
               <circle cx="600" cy="175" r="180" fill="url(#sunGlow)"/>
-              <!-- Distant mountains -->
               <path d="M0 380 L120 300 L220 340 L340 280 L460 330 L580 270 L720 320 L800 300 L800 500 L0 500 Z" fill="#0e1930" opacity="0.85"/>
               <path d="M0 420 L150 360 L280 400 L420 350 L560 390 L700 350 L800 380 L800 500 L0 500 Z" fill="#0a1224" opacity="0.9"/>
-              <!-- Persepolis silhouette -->
               <g fill="#060b18" opacity="0.95">
                 <rect x="180" y="400" width="440" height="20"/>
                 <rect x="200" y="380" width="30" height="20"/>
@@ -212,7 +192,6 @@
           </div>
         </article>
 
-        <!-- Right: Timeline / progress widget -->
         <aside class="hero-widget">
           <header class="widget-head">
             <span class="widget-label">گاه‌شمار پیشرفت تمدنی</span>
@@ -237,17 +216,25 @@
             </div>
           </div>
 
-          <button id="btnQuickContinue" class="btn btn-primary btn-block">
-            <span>ادامه‌ی سفر تاریخی</span>
-            <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-              <path d="M19 12H5M12 5l-7 7 7 7"/>
-            </svg>
-          </button>
+          <div class="widget-actions">
+            <button id="btnQuickContinue" class="btn btn-primary">
+              <span>ادامه‌ی سفر</span>
+              <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M19 12H5M12 5l-7 7 7 7"/>
+              </svg>
+            </button>
+            <button id="btnDailyChallenge" class="btn btn-outline" title="چالش امروز (فقط یک بار در روز)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="width:16px;height:16px">
+                <circle cx="12" cy="12" r="9"/>
+                <path d="M12 7v5l3 3"/>
+              </svg>
+              <span>چالش امروز</span>
+            </button>
+          </div>
         </aside>
 
       </div>
 
-      <!-- ERA SELECTOR -->
       <section class="era-section">
         <header class="section-head">
           <div class="section-head-line"></div>
@@ -258,34 +245,74 @@
           از عیلام باستان تا دوران معاصر؛ هر دوره یک فصل، هر فصل یک دوراهی تاریخی.
         </p>
 
-        <!-- Era filter tabs -->
-        <nav class="era-tabs" id="eraTabs" aria-label="فیلتر دوره‌های تاریخی">
-          <button class="era-tab is-active" data-era="all">همه‌ی دوره‌ها</button>
-          <button class="era-tab" data-era="ancient">باستان</button>
-          <button class="era-tab" data-era="classical">میانه</button>
-          <button class="era-tab" data-era="islamic">دوره‌ی اسلامی</button>
-          <button class="era-tab" data-era="modern">معاصر</button>
-        </nav>
+        <div class="era-controls">
+          <nav class="era-tabs" id="eraTabs" aria-label="فیلتر دوره‌های تاریخی">
+            <button class="era-tab is-active" data-era="all">همه</button>
+            <button class="era-tab" data-era="ancient">باستان</button>
+            <button class="era-tab" data-era="classical">میانه</button>
+            <button class="era-tab" data-era="islamic">اسلامی</button>
+            <button class="era-tab" data-era="modern">معاصر</button>
+            <button class="era-tab era-tab-bookmark" data-era="bookmarked">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="width:14px;height:14px">
+                <path d="M12 3l2.6 5.9L21 10l-4.5 4.4L17.5 21 12 17.7 6.5 21l1-6.6L3 10l6.4-1.1L12 3z"/>
+              </svg>
+              <span>نشان‌شده‌ها</span>
+            </button>
+          </nav>
 
-        <!-- Chapter grid -->
+          <div class="view-toggle" role="group" aria-label="نمای فصل‌ها">
+            <button class="view-toggle-btn is-active" data-view="cards" title="نمای کارت‌ها">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <rect x="3" y="3" width="7" height="7" rx="1"/>
+                <rect x="14" y="3" width="7" height="7" rx="1"/>
+                <rect x="3" y="14" width="7" height="7" rx="1"/>
+                <rect x="14" y="14" width="7" height="7" rx="1"/>
+              </svg>
+            </button>
+            <button class="view-toggle-btn" data-view="map" title="نمای نقشه">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path d="M9 3L3 5v16l6-2 6 2 6-2V3l-6 2-6-2z"/>
+                <path d="M9 3v16M15 5v16"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
         <div id="chaptersGrid" class="chapters-grid"></div>
 
-        <!-- Empty state -->
+        <div id="mapView" class="map-view is-hidden">
+          <div class="map-wrapper">
+            <svg id="iranMapSvg" class="iran-map" viewBox="0 0 900 700" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="mapLand" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#1e2d52"/>
+                  <stop offset="1" stop-color="#16213e"/>
+                </linearGradient>
+                <filter id="mapGlow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="3" result="blur"/>
+                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+              </defs>
+              <path class="map-land" d="M 220 180 L 260 150 L 340 130 L 420 125 L 500 130 L 580 125 L 660 130 L 740 145 L 810 180 L 850 240 L 870 320 L 860 400 L 820 480 L 760 540 L 680 580 L 600 600 L 520 605 L 440 590 L 380 560 L 320 520 L 260 470 L 220 410 L 200 340 L 205 260 L 210 210 Z" fill="url(#mapLand)" stroke="#c9a227" stroke-width="1.5"/>
+              <g id="mapPoints"></g>
+            </svg>
+            <p class="map-hint">روی هر نقطه کلیک کنید تا فصل مربوطه باز شود. نقاط طلایی در دسترس، سبز تکمیل‌شده و خاکستری قفل هستند.</p>
+          </div>
+        </div>
+
         <div id="chaptersEmpty" class="empty-state is-hidden">
           <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
             <circle cx="32" cy="32" r="26"/>
             <path d="M32 14v36M14 32h36"/>
           </svg>
-          <p>فصلی در این دوره یافت نشد.</p>
+          <p id="chaptersEmptyText">فصلی در این دوره یافت نشد.</p>
         </div>
       </section>
 
     </section>
 
-    <!-- ─────────────── VIEW 2: STORY ─────────────── -->
     <section id="viewStory" class="view view-story is-hidden">
 
-      <!-- Story toolbar -->
       <div class="story-toolbar">
         <button id="btnBackToMap" class="btn btn-ghost btn-sm">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -299,18 +326,23 @@
           <h2 id="storyEraTitle" class="story-era-title">انقراض مادها و برآمدن هخامنشیان</h2>
         </div>
 
-        <button id="btnViewChapterSource" class="btn btn-outline btn-sm">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-            <path d="M12 6.5v13m0-13C10.8 5.5 9.2 5 7.5 5S4.2 5.5 3 6.5v13C4.2 18.5 5.8 18 7.5 18s3.3.5 4.5 1.5m0-13C13.2 5.5 14.8 5 16.5 5s3.3.5 4.5 1.5v13c-1.2-1-2.8-1.5-4.5-1.5s-3.3.5-4.5 1.5"/>
-          </svg>
-          <span>منبع علمی این رویداد</span>
-        </button>
+        <div class="story-toolbar-actions">
+          <button id="btnBookmark" class="icon-btn" title="نشان‌گذاری این فصل" aria-label="نشان‌گذاری این فصل">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <path d="M12 3l2.6 5.9L21 10l-4.5 4.4L17.5 21 12 17.7 6.5 21l1-6.6L3 10l6.4-1.1L12 3z"/>
+            </svg>
+          </button>
+          <button id="btnViewChapterSource" class="btn btn-outline btn-sm">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <path d="M12 6.5v13m0-13C10.8 5.5 9.2 5 7.5 5S4.2 5.5 3 6.5v13C4.2 18.5 5.8 18 7.5 18s3.3.5 4.5 1.5m0-13C13.2 5.5 14.8 5 16.5 5s3.3.5 4.5 1.5v13c-1.2-1-2.8-1.5-4.5-1.5s-3.3.5-4.5 1.5"/>
+            </svg>
+            <span>منبع علمی</span>
+          </button>
+        </div>
       </div>
 
-      <!-- Story stage -->
       <article class="story-stage">
 
-        <!-- Scene context ribbon -->
         <div class="scene-context">
           <svg class="scene-context-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
             <path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/>
@@ -321,7 +353,6 @@
           </div>
         </div>
 
-        <!-- Speakers -->
         <div class="speakers-grid">
 
           <div id="charCardA" class="speaker-card speaker-card-a">
@@ -362,7 +393,6 @@
 
         </div>
 
-        <!-- Dialogue box -->
         <div class="dialogue-box">
           <header class="dialogue-head">
             <span id="currentSpeakerLabel" class="dialogue-speaker">
@@ -377,7 +407,6 @@
           <div id="dialogueExplanation" class="dialogue-explanation is-hidden"></div>
         </div>
 
-        <!-- Decision stage -->
         <div class="decision-stage">
           <header class="decision-head">
             <h4 class="decision-title">
@@ -389,8 +418,24 @@
           <div id="optionsContainer" class="options-list"></div>
         </div>
 
-        <!-- Feedback panel -->
         <div id="feedbackPanel" class="feedback-panel is-hidden"></div>
+
+        <section id="notesSection" class="notes-section">
+          <header class="notes-head">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <path d="M5 3h11a3 3 0 0 1 3 3v15l-5-3-5 3-4-3V6a3 3 0 0 1 0-3z"/>
+              <path d="M9 8h6M9 12h4"/>
+            </svg>
+            <span>یادداشت شخصی شما در این فصل</span>
+          </header>
+          <textarea id="notesInput" class="notes-input" placeholder="تحلیل، پرسش یا نکته‌ی جالبی که می‌خواهید بعداً ببینید..." rows="3"></textarea>
+          <span class="notes-hint">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="width:12px;height:12px">
+              <path d="M20 6L9 17l-5-5"/>
+            </svg>
+            یادداشت شما به‌صورت خودکار ذخیره می‌شود
+          </span>
+        </section>
 
       </article>
 
@@ -398,9 +443,7 @@
 
   </main>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       MODAL: CODEX (sources)
-       ═══════════════════════════════════════════════════════════ -->
+  <!-- Modal: Codex -->
   <div id="modalCodex" class="modal is-hidden" role="dialog" aria-modal="true" aria-labelledby="codexTitle">
     <div class="modal-backdrop" data-close-modal="modalCodex"></div>
     <div class="modal-card modal-card-wide">
@@ -449,9 +492,7 @@
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       MODAL: DYNASTY MAP
-       ═══════════════════════════════════════════════════════════ -->
+  <!-- Modal: Dynasty -->
   <div id="modalDynasty" class="modal is-hidden" role="dialog" aria-modal="true" aria-labelledby="dynastyTitle">
     <div class="modal-backdrop" data-close-modal="modalDynasty"></div>
     <div class="modal-card modal-card-wide">
@@ -478,9 +519,7 @@
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       MODAL: AWARDS
-       ═══════════════════════════════════════════════════════════ -->
+  <!-- Modal: Awards -->
   <div id="modalAwards" class="modal is-hidden" role="dialog" aria-modal="true" aria-labelledby="awardsTitle">
     <div class="modal-backdrop" data-close-modal="modalAwards"></div>
     <div class="modal-card">
@@ -503,9 +542,7 @@
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       MODAL: STATS
-       ═══════════════════════════════════════════════════════════ -->
+  <!-- Modal: Stats -->
   <div id="modalStats" class="modal is-hidden" role="dialog" aria-modal="true" aria-labelledby="statsTitle">
     <div class="modal-backdrop" data-close-modal="modalStats"></div>
     <div class="modal-card">
@@ -527,9 +564,87 @@
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       MODAL: CONFIRM RESET
-       ═══════════════════════════════════════════════════════════ -->
+  <!-- Modal: Export / Import -->
+  <div id="modalTransfer" class="modal is-hidden" role="dialog" aria-modal="true" aria-labelledby="transferTitle">
+    <div class="modal-backdrop" data-close-modal="modalTransfer"></div>
+    <div class="modal-card modal-card-wide">
+      <header class="modal-head">
+        <div class="modal-head-left">
+          <div class="modal-emblem">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <path d="M7 16l-4-4 4-4M17 8l4 4-4 4M3 12h18"/>
+            </svg>
+          </div>
+          <div>
+            <h3 id="transferTitle" class="modal-title">انتقال پیشرفت بین دستگاه‌ها</h3>
+            <p class="modal-subtitle">پیشرفت خود را به‌صورت یک کد کوتاه کپی کنید و در دستگاه دیگر وارد کنید</p>
+          </div>
+        </div>
+        <button class="modal-close" data-close-modal="modalTransfer" aria-label="بستن">&times;</button>
+      </header>
+      <div class="modal-body">
+        <section class="transfer-section">
+          <h4 class="transfer-section-title">
+            <span class="transfer-step">۱</span>
+            خروجی گرفتن از پیشرفت فعلی
+          </h4>
+          <p class="transfer-help">این کد را کپی کنید و در جای امن (مثلاً پیام به خودتان در تلگرام) نگه دارید.</p>
+          <div class="transfer-code-wrap">
+            <textarea id="exportCode" class="transfer-code" readonly rows="4" placeholder="برای ساخت کد، روی دکمه‌ی زیر بزنید"></textarea>
+          </div>
+          <div class="transfer-actions">
+            <button id="btnGenerateExport" class="btn btn-outline btn-sm">تولید کد خروجی</button>
+            <button id="btnCopyExport" class="btn btn-primary btn-sm" disabled>کپی کد</button>
+          </div>
+        </section>
+
+        <div class="transfer-divider">
+          <span class="transfer-divider-line"></span>
+          <span class="transfer-divider-mark">◆</span>
+          <span class="transfer-divider-line"></span>
+        </div>
+
+        <section class="transfer-section">
+          <h4 class="transfer-section-title">
+            <span class="transfer-step">۲</span>
+            وارد کردن پیشرفت در این دستگاه
+          </h4>
+          <p class="transfer-help transfer-help-warning">توجه: با این کار، پیشرفت فعلی این دستگاه جایگزین می‌شود.</p>
+          <div class="transfer-code-wrap">
+            <textarea id="importCode" class="transfer-code" rows="4" placeholder="کد خروجی را اینجا بچسبانید"></textarea>
+          </div>
+          <div class="transfer-actions">
+            <button id="btnImportState" class="btn btn-danger btn-sm">وارد کردن پیشرفت</button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Daily Challenge -->
+  <div id="modalChallenge" class="modal is-hidden" role="dialog" aria-modal="true" aria-labelledby="challengeTitle">
+    <div class="modal-backdrop" data-close-modal="modalChallenge"></div>
+    <div class="modal-card modal-card-wide">
+      <header class="modal-head">
+        <div class="modal-head-left">
+          <div class="modal-emblem">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M12 7v5l3 3"/>
+            </svg>
+          </div>
+          <div>
+            <h3 id="challengeTitle" class="modal-title">چالش امروز</h3>
+            <p class="modal-subtitle">یک پرسش تصادفی از فصل‌های گشوده‌شده؛ روزانه یک بار</p>
+          </div>
+        </div>
+        <button class="modal-close" data-close-modal="modalChallenge" aria-label="بستن">&times;</button>
+      </header>
+      <div id="challengeBody" class="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Modal: Confirm Reset -->
   <div id="modalConfirm" class="modal is-hidden" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
     <div class="modal-backdrop" data-close-modal="modalConfirm"></div>
     <div class="modal-card modal-card-narrow">
@@ -544,7 +659,7 @@
       </header>
       <div class="modal-body modal-body-center">
         <p>
-          با این کار، تمامی سطوح، امتیازهای بصیرت، فصل‌های فتح‌شده و مدال‌های کسب‌شده پاک می‌شوند
+          با این کار، تمامی سطوح، امتیازهای بصیرت، فصل‌های فتح‌شده، مدال‌ها و یادداشت‌ها پاک می‌شوند
           و سفر شما از ابتدا آغاز خواهد شد.
         </p>
         <p class="modal-body-warning">آیا مطمئن هستید؟</p>
@@ -556,10 +671,8 @@
     </div>
   </div>
 
-  <!-- Toast container -->
   <div id="toastBox" class="toast-box" aria-live="polite" aria-atomic="true"></div>
 
-  <!-- Scripts -->
   <script src="script.js"></script>
 </body>
-</html>
+  </html>
