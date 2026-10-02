@@ -13,12 +13,13 @@
 
   <link rel="stylesheet" href="styles.css">
 
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2316213e'/><path d='M16 5 L26 16 L16 27 L6 16 Z' fill='none' stroke='%23c9a227' stroke-width='2'/><circle cx='16' cy='16' r='3' fill='%23c9a227'/></svg>">
-    <link rel="manifest" href="./manifest.json">
+  <link rel="manifest" href="./manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="تاریخ‌بان">
   <link rel="apple-touch-icon" href="./icon-192.png">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2316213e'/><path d='M16 5 L26 16 L16 27 L6 16 Z' fill='none' stroke='%23c9a227' stroke-width='2'/><circle cx='16' cy='16' r='3' fill='%23c9a227'/></svg>">
 </head>
 
 <body>
@@ -133,14 +134,16 @@
 
   <main class="site-main">
 
+    <!-- ═══════════════════════ VIEW 1: HUB ═══════════════════════ -->
     <section id="viewHub" class="view view-hub">
 
       <div class="hero-grid">
 
         <article class="hero-scene">
           <div class="hero-scene-bg" aria-hidden="true">
-  <img src="./assets/hero-bg.jpg" alt="" class="hero-scene-img" loading="eager">
-</div>
+            <img src="./assets/hero-bg.jpg" alt="" class="hero-scene-img" loading="eager">
+          </div>
+
           <div class="hero-scene-content">
             <div class="hero-kicker">
               <span class="hero-kicker-dot"></span>
@@ -174,9 +177,9 @@
 
           <div class="widget-spotlight">
             <span class="widget-sublabel">ماموریت پیشنهادی:</span>
-            <h3 id="spotlightTitle" class="widget-spotlight-title">قیام کوروش و خیانت هارپاگ</h3>
+            <h3 id="spotlightTitle" class="widget-spotlight-title">عیلام؛ نخستین شهرهای ایران</h3>
             <p id="spotlightDesc" class="widget-spotlight-desc">
-              گفت‌وگوی مخفیانه‌ی فرمانده ماد با کوروش؛ نقطه‌ی عطفِ زایش شاهنشاهی پارس.
+              پنج هزار سال پیش از میلاد کوروش، در دشت خوزستان، نخستین شهرهای فلات ایران ساخته شد.
             </p>
           </div>
 
@@ -262,10 +265,6 @@
                   <stop offset="0" stop-color="#1e2d52"/>
                   <stop offset="1" stop-color="#16213e"/>
                 </linearGradient>
-                <filter id="mapGlow" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="3" result="blur"/>
-                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-                </filter>
               </defs>
               <path class="map-land" d="M 220 180 L 260 150 L 340 130 L 420 125 L 500 130 L 580 125 L 660 130 L 740 145 L 810 180 L 850 240 L 870 320 L 860 400 L 820 480 L 760 540 L 680 580 L 600 600 L 520 605 L 440 590 L 380 560 L 320 520 L 260 470 L 220 410 L 200 340 L 205 260 L 210 210 Z" fill="url(#mapLand)" stroke="#c9a227" stroke-width="1.5"/>
               <g id="mapPoints"></g>
@@ -285,6 +284,7 @@
 
     </section>
 
+    <!-- ═══════════════════════ VIEW 2: STORY ═══════════════════════ -->
     <section id="viewStory" class="view view-story is-hidden">
 
       <div class="story-toolbar">
@@ -296,12 +296,12 @@
         </button>
 
         <div class="story-toolbar-title">
-          <span id="storyEraTag" class="story-era-tag">فصل اول • ۵۵۰ پیش از میلاد</span>
-          <h2 id="storyEraTitle" class="story-era-title">انقراض مادها و برآمدن هخامنشیان</h2>
+          <span id="storyEraTag" class="story-era-tag">—</span>
+          <h2 id="storyEraTitle" class="story-era-title">—</h2>
         </div>
 
         <div class="story-toolbar-actions">
-          <button id="btnBookmark" class="icon-btn" title="نشان‌گذاری این فصل" aria-label="نشان‌گذاری این فصل">
+          <button id="btnBookmark" class="icon-btn" title="نشان‌گذاری این فصل">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
               <path d="M12 3l2.6 5.9L21 10l-4.5 4.4L17.5 21 12 17.7 6.5 21l1-6.6L3 10l6.4-1.1L12 3z"/>
             </svg>
@@ -317,6 +317,7 @@
 
       <article class="story-stage">
 
+        <!-- بستر تاریخی صحنه -->
         <div class="scene-context">
           <svg class="scene-context-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
             <path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/>
@@ -327,8 +328,26 @@
           </div>
         </div>
 
-        <div class="speakers-grid">
+        <!-- پیش‌درآمد (جدید) -->
+        <section class="intro-section">
+          <header class="section-mini-head">
+            <span class="section-mini-mark"></span>
+            <h4 class="section-mini-title">پیش‌درآمد؛ چگونه به اینجا رسیدیم؟</h4>
+          </header>
+          <p id="storyIntroduction" class="intro-text">...</p>
+        </section>
 
+        <!-- بازیگران (جدید) -->
+        <section class="characters-section">
+          <header class="section-mini-head">
+            <span class="section-mini-mark"></span>
+            <h4 class="section-mini-title">بازیگران این رویداد</h4>
+          </header>
+          <div id="charactersGrid" class="characters-grid"></div>
+        </section>
+
+        <!-- سخنرانان -->
+        <div class="speakers-grid">
           <div id="charCardA" class="speaker-card speaker-card-a">
             <div class="speaker-frame">
               <svg class="speaker-arch" viewBox="0 0 80 90" preserveAspectRatio="none" aria-hidden="true">
@@ -345,9 +364,7 @@
           <div class="speakers-divider" aria-hidden="true">
             <span class="divider-line"></span>
             <span class="divider-diamond"></span>
-            <span class="divider-line"></span>
             <span class="divider-caption">روایت زنده</span>
-            <span class="divider-line"></span>
             <span class="divider-diamond"></span>
             <span class="divider-line"></span>
           </div>
@@ -364,23 +381,36 @@
               <p id="charRoleB" class="speaker-role">—</p>
             </div>
           </div>
-
         </div>
 
+        <!-- جعبه‌ی گفت‌وگو (چند مرحله‌ای) -->
         <div class="dialogue-box">
           <header class="dialogue-head">
             <span id="currentSpeakerLabel" class="dialogue-speaker">
               <span class="dialogue-speaker-mark"></span>
-              در حال بارگذاری...
+              گفت‌وگوی زنده
             </span>
             <span class="dialogue-source-hint">بر پایه‌ی اسناد دست‌اول</span>
           </header>
           <blockquote id="dialogueText" class="dialogue-quote">
             «...»
           </blockquote>
-          <div id="dialogueExplanation" class="dialogue-explanation is-hidden"></div>
+          <div class="dialogue-nav">
+            <button id="btnDialoguePrev" class="btn-dialogue-nav" type="button" aria-label="گفت‌وگوی قبلی" disabled>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M15 18l-6-6 6-6"/>
+              </svg>
+            </button>
+            <span id="dialogueProgress" class="dialogue-progress">۰ از ۰</span>
+            <button id="btnDialogueNext" class="btn-dialogue-nav" type="button" aria-label="گفت‌وگوی بعدی" disabled>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 18l6-6-6-6"/>
+              </svg>
+            </button>
+          </div>
         </div>
 
+        <!-- صحنه‌ی تصمیم -->
         <div class="decision-stage">
           <header class="decision-head">
             <h4 class="decision-title">
@@ -394,6 +424,25 @@
 
         <div id="feedbackPanel" class="feedback-panel is-hidden"></div>
 
+        <!-- چه شد؟ (جدید) -->
+        <section id="aftermathSection" class="aftermath-section is-hidden">
+          <header class="section-mini-head section-mini-head-aftermath">
+            <span class="section-mini-mark"></span>
+            <h4 class="section-mini-title">پس واقعاً چه شد؟</h4>
+          </header>
+          <p id="storyAftermath" class="aftermath-text">...</p>
+        </section>
+
+        <!-- میراث و پل به آینده (جدید) -->
+        <section id="legacySection" class="legacy-section is-hidden">
+          <header class="section-mini-head section-mini-head-legacy">
+            <span class="section-mini-mark"></span>
+            <h4 class="section-mini-title">میراث و پل به آینده</h4>
+          </header>
+          <p id="storyLegacy" class="legacy-text">...</p>
+        </section>
+
+        <!-- یادداشت -->
         <section id="notesSection" class="notes-section">
           <header class="notes-head">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
@@ -418,7 +467,7 @@
   </main>
 
   <!-- Modal: Codex -->
-  <div id="modalCodex" class="modal is-hidden" role="dialog" aria-modal="true" aria-labelledby="codexTitle">
+  <div id="modalCodex" class="modal is-hidden" role="dialog" aria-modal="true">
     <div class="modal-backdrop" data-close-modal="modalCodex"></div>
     <div class="modal-card modal-card-wide">
       <header class="modal-head">
@@ -429,7 +478,7 @@
             </svg>
           </div>
           <div>
-            <h3 id="codexTitle" class="modal-title">دانشنامه و اعتبار علمی محتوا</h3>
+            <h3 class="modal-title">دانشنامه و اعتبار علمی محتوا</h3>
             <p class="modal-subtitle">مبتنی بر منابع آکادمیک، کتیبه‌ها و اسناد باستان‌شناختی</p>
           </div>
         </div>
@@ -467,7 +516,7 @@
   </div>
 
   <!-- Modal: Dynasty -->
-  <div id="modalDynasty" class="modal is-hidden" role="dialog" aria-modal="true" aria-labelledby="dynastyTitle">
+  <div id="modalDynasty" class="modal is-hidden" role="dialog" aria-modal="true">
     <div class="modal-backdrop" data-close-modal="modalDynasty"></div>
     <div class="modal-card modal-card-wide">
       <header class="modal-head">
@@ -481,7 +530,7 @@
             </svg>
           </div>
           <div>
-            <h3 id="dynastyTitle" class="modal-title">نقشه‌ی سلسله‌های ایران</h3>
+            <h3 class="modal-title">نقشه‌ی سلسله‌های ایران</h3>
             <p class="modal-subtitle">گاه‌شمار پیوسته از عیلام تا امروز</p>
           </div>
         </div>
@@ -494,7 +543,7 @@
   </div>
 
   <!-- Modal: Awards -->
-  <div id="modalAwards" class="modal is-hidden" role="dialog" aria-modal="true" aria-labelledby="awardsTitle">
+  <div id="modalAwards" class="modal is-hidden" role="dialog" aria-modal="true">
     <div class="modal-backdrop" data-close-modal="modalAwards"></div>
     <div class="modal-card">
       <header class="modal-head">
@@ -506,7 +555,7 @@
             </svg>
           </div>
           <div>
-            <h3 id="awardsTitle" class="modal-title">مدال‌ها و دستاوردها</h3>
+            <h3 class="modal-title">مدال‌ها و دستاوردها</h3>
             <p class="modal-subtitle">نشان‌های تفکر انتقادی و تسلط تاریخی</p>
           </div>
         </div>
@@ -517,7 +566,7 @@
   </div>
 
   <!-- Modal: Stats -->
-  <div id="modalStats" class="modal is-hidden" role="dialog" aria-modal="true" aria-labelledby="statsTitle">
+  <div id="modalStats" class="modal is-hidden" role="dialog" aria-modal="true">
     <div class="modal-backdrop" data-close-modal="modalStats"></div>
     <div class="modal-card">
       <header class="modal-head">
@@ -528,7 +577,7 @@
             </svg>
           </div>
           <div>
-            <h3 id="statsTitle" class="modal-title">آمار و جدول امتیازات</h3>
+            <h3 class="modal-title">آمار و جدول امتیازات</h3>
             <p class="modal-subtitle">کارنامه‌ی سفر شما در تاریخ ایران</p>
           </div>
         </div>
@@ -538,8 +587,8 @@
     </div>
   </div>
 
-  <!-- Modal: Export / Import -->
-  <div id="modalTransfer" class="modal is-hidden" role="dialog" aria-modal="true" aria-labelledby="transferTitle">
+  <!-- Modal: Transfer -->
+  <div id="modalTransfer" class="modal is-hidden" role="dialog" aria-modal="true">
     <div class="modal-backdrop" data-close-modal="modalTransfer"></div>
     <div class="modal-card modal-card-wide">
       <header class="modal-head">
@@ -550,7 +599,7 @@
             </svg>
           </div>
           <div>
-            <h3 id="transferTitle" class="modal-title">انتقال پیشرفت بین دستگاه‌ها</h3>
+            <h3 class="modal-title">انتقال پیشرفت بین دستگاه‌ها</h3>
             <p class="modal-subtitle">پیشرفت خود را به‌صورت یک کد کوتاه کپی کنید و در دستگاه دیگر وارد کنید</p>
           </div>
         </div>
@@ -596,7 +645,7 @@
   </div>
 
   <!-- Modal: Daily Challenge -->
-  <div id="modalChallenge" class="modal is-hidden" role="dialog" aria-modal="true" aria-labelledby="challengeTitle">
+  <div id="modalChallenge" class="modal is-hidden" role="dialog" aria-modal="true">
     <div class="modal-backdrop" data-close-modal="modalChallenge"></div>
     <div class="modal-card modal-card-wide">
       <header class="modal-head">
@@ -608,8 +657,8 @@
             </svg>
           </div>
           <div>
-            <h3 id="challengeTitle" class="modal-title">چالش امروز</h3>
-            <p class="modal-subtitle">یک پرسش تصادفی از فصل‌های گشوده‌شده؛ روزانه یک بار</p>
+            <h3 class="modal-title">چالش امروز</h3>
+            <p class="modal-subtitle">یک پرسش کوتاه از دانسته‌های شما؛ روزانه یک بار</p>
           </div>
         </div>
         <button class="modal-close" data-close-modal="modalChallenge" aria-label="بستن">&times;</button>
@@ -619,7 +668,7 @@
   </div>
 
   <!-- Modal: Confirm Reset -->
-  <div id="modalConfirm" class="modal is-hidden" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+  <div id="modalConfirm" class="modal is-hidden" role="dialog" aria-modal="true">
     <div class="modal-backdrop" data-close-modal="modalConfirm"></div>
     <div class="modal-card modal-card-narrow">
       <header class="modal-head modal-head-center">
@@ -629,7 +678,7 @@
             <path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>
           </svg>
         </div>
-        <h3 id="confirmTitle" class="modal-title">بازنشانی کل سفر</h3>
+        <h3 class="modal-title">بازنشانی کل سفر</h3>
       </header>
       <div class="modal-body modal-body-center">
         <p>
@@ -649,4 +698,4 @@
 
   <script src="script.js"></script>
 </body>
-  </html>
+</html>
