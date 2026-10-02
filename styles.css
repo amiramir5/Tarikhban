@@ -1,13 +1,13 @@
 /* ═══════════════════════════════════════════════════════════════════════════
    تاریخ‌بان — استایل‌نامه‌ی اصلی
    سبک: ایرانی-تاریخی | پالت: لاجوردی، طلای کهنه، عاج
+   نسخه: ۴ (شامل فاز ۱ ارتقای بصری — تصاویر و بک‌گراندها)
    ═══════════════════════════════════════════════════════════════════════════ */
 
 /* ───────────────────────────────────────────────────────────────────────────
    1. متغیرهای پایه (Design Tokens)
    ─────────────────────────────────────────────────────────────────────────── */
 :root {
-  /* پالت اصلی */
   --c-lapis-900: #0f1626;
   --c-lapis-800: #16213e;
   --c-lapis-700: #1e2d52;
@@ -35,7 +35,6 @@
   --c-olive-dark: #3b2f1e;
   --c-emerald: #4a8a5c;
 
-  /* نقش‌های معنایی */
   --bg-app: var(--c-lapis-900);
   --bg-card: var(--c-lapis-800);
   --bg-card-alt: var(--c-lapis-700);
@@ -55,13 +54,11 @@
   --danger: var(--c-oxblood);
   --success: var(--c-emerald);
 
-  /* فونت‌ها */
   --font-heading: 'Amiri', 'Vazirmatn', serif;
   --font-dialogue: 'Noto Naskh Arabic', 'Amiri', serif;
   --font-ui: 'Estedad', 'Vazirmatn', sans-serif;
   --font-body: 'Vazirmatn', system-ui, sans-serif;
 
-  /* اندازه‌ها */
   --radius-sm: 4px;
   --radius-md: 6px;
   --radius-lg: 10px;
@@ -71,7 +68,6 @@
   --shadow-card: 0 16px 40px -18px rgba(0, 0, 0, 0.75);
   --shadow-gold: 0 0 0 1px rgba(201, 162, 39, 0.35), 0 12px 32px -14px rgba(201, 162, 39, 0.25);
 
-  /* انیمیشن */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --dur-fast: 0.18s;
   --dur-base: 0.32s;
@@ -381,7 +377,6 @@ a {
   color: #e5a5a5;
 }
 
-/* حالت فعال نشان‌گذاری */
 .icon-btn.is-bookmarked {
   background: rgba(201, 162, 39, 0.18);
   border-color: var(--c-gold-400);
@@ -409,7 +404,7 @@ a {
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   6. بخش قهرمان (Hero)
+   6. بخش قهرمان (Hero) — با تصویر واقعی
    ─────────────────────────────────────────────────────────────────────────── */
 .hero-grid {
   display: grid;
@@ -440,12 +435,45 @@ a {
   position: absolute;
   inset: 0;
   z-index: 0;
+  overflow: hidden;
 }
 
-.hero-scene-bg svg {
+.hero-scene-img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
+  object-fit: cover;
+  object-position: center;
   display: block;
+  transform: scale(1.02);
+  animation: heroSlowZoom 25s ease-in-out infinite alternate;
+}
+
+@keyframes heroSlowZoom {
+  0% { transform: scale(1.02); }
+  100% { transform: scale(1.08); }
+}
+
+/* لایه‌ی تیره روی عکس هیرو برای خوانایی متن */
+.hero-scene-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(15, 22, 38, 0.15) 0%,
+    rgba(15, 22, 38, 0.35) 40%,
+    rgba(15, 22, 38, 0.85) 85%,
+    rgba(15, 22, 38, 0.98) 100%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* در صورت وجود SVG قدیمی، پنهان شود */
+.hero-scene-bg svg {
+  display: none;
 }
 
 .hero-scene::before {
@@ -454,6 +482,7 @@ a {
   inset: 0;
   z-index: 1;
   background: linear-gradient(180deg, transparent 0%, rgba(15, 22, 38, 0.4) 40%, rgba(15, 22, 38, 0.95) 100%);
+  pointer-events: none;
 }
 
 .hero-scene::after {
@@ -478,7 +507,9 @@ a {
   align-items: center;
   gap: 8px;
   padding: 5px 12px;
-  background: rgba(201, 162, 39, 0.12);
+  background: rgba(201, 162, 39, 0.18);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid var(--border-gold);
   border-radius: var(--radius-md);
   font-family: var(--font-ui);
@@ -541,6 +572,7 @@ a {
   color: var(--fg-secondary);
   max-width: 620px;
   margin-bottom: 22px;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
 }
 
 .hero-features {
@@ -572,7 +604,9 @@ a {
 
 /* ویجت گاه‌شمار */
 .hero-widget {
-  background: linear-gradient(160deg, var(--c-lapis-800) 0%, var(--c-lapis-700) 100%);
+  background: linear-gradient(160deg, rgba(22, 33, 62, 0.94) 0%, rgba(30, 45, 82, 0.92) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border-gold-soft);
   border-radius: var(--radius-xl);
   padding: 24px;
@@ -745,10 +779,7 @@ a {
 .btn-primary:hover:not(:disabled) .btn-arrow { transform: translateX(-4px); }
 .btn-primary:active:not(:disabled) { transform: translateY(0); }
 
-.btn-primary:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .btn-outline {
   background: transparent;
@@ -761,10 +792,7 @@ a {
   border-color: var(--c-gold-300);
 }
 
-.btn-outline:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+.btn-outline:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .btn-ghost {
   background: rgba(30, 45, 82, 0.35);
@@ -870,15 +898,9 @@ a {
   box-shadow: 0 6px 16px -6px rgba(201, 162, 39, 0.55);
 }
 
-.era-tab-bookmark svg {
-  color: currentColor;
-}
+.era-tab-bookmark svg { color: currentColor; }
+.era-tab-bookmark.is-active svg { fill: var(--c-lapis-900); }
 
-.era-tab-bookmark.is-active svg {
-  fill: var(--c-lapis-900);
-}
-
-/* سوییچ نمایش (کارت / نقشه) */
 .view-toggle {
   display: inline-flex;
   gap: 0;
@@ -901,7 +923,6 @@ a {
 }
 
 .view-toggle-btn svg { width: 16px; height: 16px; }
-
 .view-toggle-btn:hover { color: var(--c-gold-300); }
 
 .view-toggle-btn.is-active {
@@ -910,7 +931,9 @@ a {
   box-shadow: inset 0 0 0 1px var(--border-gold);
 }
 
-/* شبکه‌ی فصل‌ها */
+/* ───────────────────────────────────────────────────────────────────────────
+   9. شبکه‌ی فصل‌ها و کارت‌های دارای بک‌گراند تصویری
+   ─────────────────────────────────────────────────────────────────────────── */
 .chapters-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -925,10 +948,13 @@ a {
   .chapters-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
-/* کارت فصل */
+/* کارت فصل — با پشتیبانی از بک‌گراند دوره */
 .chapter-card {
   position: relative;
-  background: linear-gradient(160deg, var(--c-lapis-800) 0%, var(--c-lapis-700) 100%);
+  background-color: var(--c-lapis-800);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   border: 1px solid var(--border-gold-soft);
   border-radius: var(--radius-lg);
   padding: 20px;
@@ -937,20 +963,55 @@ a {
   transition: all var(--dur-base) var(--ease-out);
   cursor: pointer;
   overflow: hidden;
+  min-height: 280px;
 }
 
+/* لایه‌ی تیره روی بک‌گراند دوره برای خوانایی متن */
 .chapter-card::before {
   content: '';
   position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--c-gold-500), transparent);
-  opacity: 0.4;
-  transition: opacity var(--dur-base) var(--ease-out);
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(15, 22, 38, 0.72) 0%,
+    rgba(15, 22, 38, 0.86) 45%,
+    rgba(15, 22, 38, 0.96) 100%
+  );
+  z-index: 0;
+  pointer-events: none;
+  transition: background var(--dur-base) var(--ease-out);
 }
 
+.chapter-card:hover::before {
+  background: linear-gradient(
+    180deg,
+    rgba(15, 22, 38, 0.58) 0%,
+    rgba(15, 22, 38, 0.78) 45%,
+    rgba(15, 22, 38, 0.94) 100%
+  );
+}
+
+/* همه‌ی محتوای کارت بالای لایه‌ی تیره */
+.chapter-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* بک‌گراند اختصاصی هر دوره */
+.chapter-card[data-era="ancient"] {
+  background-image: url('./assets/era-ancient.jpg');
+}
+.chapter-card[data-era="classical"] {
+  background-image: url('./assets/era-classical.jpg');
+}
+.chapter-card[data-era="islamic"] {
+  background-image: url('./assets/era-islamic.jpg');
+}
+.chapter-card[data-era="modern"] {
+  background-image: url('./assets/era-modern.jpg');
+}
+
+/* گوشه‌ی تزئینی پایین-راست */
 .chapter-card::after {
   content: '';
   position: absolute;
@@ -963,6 +1024,7 @@ a {
   border-radius: 0 0 var(--radius-sm) 0;
   opacity: 0.35;
   transition: opacity var(--dur-base) var(--ease-out);
+  z-index: 2;
 }
 
 .chapter-card:hover {
@@ -971,12 +1033,11 @@ a {
   box-shadow: var(--shadow-gold);
 }
 
-.chapter-card:hover::before { opacity: 1; }
 .chapter-card:hover::after { opacity: 0.9; }
 
 .chapter-card.is-locked {
   cursor: not-allowed;
-  opacity: 0.42;
+  opacity: 0.5;
   filter: grayscale(0.7);
 }
 
@@ -986,21 +1047,12 @@ a {
   border-color: var(--border-gold-soft);
 }
 
-.chapter-card.is-done::before {
-  background: linear-gradient(90deg, transparent, var(--success), transparent);
-  opacity: 0.7;
+.chapter-card.is-done {
+  border-color: rgba(74, 138, 92, 0.5);
 }
 
-.chapter-card.is-done:hover::before { opacity: 1; }
-
-/* نشانه‌ی نشان‌گذاری روی کارت */
 .chapter-card.is-bookmarked {
   border-color: var(--c-gold-400);
-}
-
-.chapter-card.is-bookmarked::before {
-  background: linear-gradient(90deg, transparent, var(--c-gold-300), transparent);
-  opacity: 1;
 }
 
 .chapter-card-head {
@@ -1009,6 +1061,8 @@ a {
   justify-content: space-between;
   gap: 10px;
   margin-bottom: 14px;
+  position: relative;
+  z-index: 1;
 }
 
 .chapter-icon {
@@ -1018,7 +1072,9 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(201, 162, 39, 0.1);
+  background: rgba(201, 162, 39, 0.15);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   border: 1px solid var(--border-gold);
   border-radius: var(--radius-md);
   color: var(--c-gold-300);
@@ -1026,14 +1082,14 @@ a {
 }
 
 .chapter-card:hover .chapter-icon {
-  background: rgba(201, 162, 39, 0.2);
+  background: rgba(201, 162, 39, 0.25);
   transform: rotate(-3deg) scale(1.05);
 }
 
 .chapter-icon svg { width: 24px; height: 24px; }
 
 .chapter-card.is-done .chapter-icon {
-  background: rgba(74, 138, 92, 0.15);
+  background: rgba(74, 138, 92, 0.2);
   border-color: rgba(74, 138, 92, 0.5);
   color: #8fcfa0;
 }
@@ -1067,22 +1123,24 @@ a {
   border-radius: var(--radius-sm);
   letter-spacing: 0.3px;
   white-space: nowrap;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
 .status-unlocked {
-  background: rgba(201, 162, 39, 0.15);
+  background: rgba(201, 162, 39, 0.2);
   color: var(--c-gold-200);
   border: 1px solid var(--border-gold);
 }
 
 .status-done {
-  background: rgba(74, 138, 92, 0.18);
+  background: rgba(74, 138, 92, 0.25);
   color: #a5dab5;
   border: 1px solid rgba(74, 138, 92, 0.5);
 }
 
 .status-locked {
-  background: rgba(0, 0, 0, 0.35);
+  background: rgba(0, 0, 0, 0.45);
   color: var(--fg-muted);
   border: 1px solid rgba(139, 134, 114, 0.25);
 }
@@ -1095,6 +1153,7 @@ a {
   letter-spacing: 0.3px;
   margin-bottom: 4px;
   display: block;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
 }
 
 .chapter-title {
@@ -1104,6 +1163,7 @@ a {
   color: var(--c-ivory-200);
   line-height: 1.4;
   margin-bottom: 8px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
 }
 
 .chapter-summary {
@@ -1118,6 +1178,7 @@ a {
   overflow: hidden;
   margin-bottom: 16px;
   flex-grow: 1;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
 }
 
 .chapter-card-foot {
@@ -1155,28 +1216,26 @@ a {
 }
 
 .foot-btn-review {
-  background: rgba(201, 162, 39, 0.1);
+  background: rgba(201, 162, 39, 0.15);
   color: var(--c-gold-300);
   border: 1px solid var(--border-gold);
 }
 
 .foot-btn-review:hover {
-  background: rgba(201, 162, 39, 0.2);
+  background: rgba(201, 162, 39, 0.25);
 }
 
 .foot-btn-locked {
-  background: rgba(0, 0, 0, 0.35);
+  background: rgba(0, 0, 0, 0.45);
   color: var(--fg-muted);
   cursor: not-allowed;
   border: 1px solid rgba(139, 134, 114, 0.2);
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   9. نمای نقشه
+   10. نمای نقشه
    ─────────────────────────────────────────────────────────────────────────── */
-.map-view {
-  padding: 8px 0;
-}
+.map-view { padding: 8px 0; }
 
 .map-wrapper {
   background: linear-gradient(160deg, var(--c-lapis-800) 0%, var(--c-lapis-700) 100%);
@@ -1228,26 +1287,16 @@ a {
   transition: all var(--dur-base) var(--ease-out);
 }
 
-.map-point.is-done circle.map-point-core {
-  fill: var(--c-emerald);
-}
-
-.map-point.is-done circle.map-point-halo {
-  stroke: var(--c-emerald);
-}
+.map-point.is-done circle.map-point-core { fill: var(--c-emerald); }
+.map-point.is-done circle.map-point-halo { stroke: var(--c-emerald); }
 
 .map-point.is-locked {
   cursor: not-allowed;
   opacity: 0.4;
 }
 
-.map-point.is-locked circle.map-point-core {
-  fill: var(--fg-muted);
-}
-
-.map-point.is-locked circle.map-point-halo {
-  stroke: var(--fg-muted);
-}
+.map-point.is-locked circle.map-point-core { fill: var(--fg-muted); }
+.map-point.is-locked circle.map-point-halo { stroke: var(--fg-muted); }
 
 .map-point.is-bookmarked circle.map-point-halo {
   opacity: 1;
@@ -1287,7 +1336,6 @@ a {
   font-style: italic;
 }
 
-/* حالت خالی */
 .empty-state {
   text-align: center;
   padding: 60px 20px;
@@ -1304,7 +1352,7 @@ a {
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   10. نمای داستان
+   11. نمای داستان
    ─────────────────────────────────────────────────────────────────────────── */
 .story-toolbar {
   display: flex;
@@ -1530,7 +1578,6 @@ a {
   padding: 0 6px;
 }
 
-/* جعبه‌ی گفت‌وگو */
 .dialogue-box {
   position: relative;
   background: rgba(15, 22, 38, 0.75);
@@ -1620,7 +1667,6 @@ a {
   color: var(--fg-secondary);
 }
 
-/* صحنه‌ی تصمیم */
 .decision-stage { padding-top: 6px; }
 
 .decision-head {
@@ -1729,7 +1775,6 @@ a {
 
 .option-text { flex: 1; }
 
-/* پنل بازخورد */
 .feedback-panel {
   margin-top: 22px;
   padding: 22px 24px;
@@ -1786,7 +1831,6 @@ a {
 }
 
 .feedback-icon-wrap svg { width: 20px; height: 20px; }
-
 .feedback-title-wrap { flex: 1; }
 
 .feedback-title {
@@ -1854,16 +1898,8 @@ a {
   color: var(--c-gold-300);
 }
 
-.source-box-label {
-  font-weight: 700;
-  color: var(--c-gold-300);
-}
-
-.source-box-name {
-  font-weight: 500;
-  color: var(--c-turquoise-300);
-  font-size: 11.5px;
-}
+.source-box-label { font-weight: 700; color: var(--c-gold-300); }
+.source-box-name { font-weight: 500; color: var(--c-turquoise-300); font-size: 11.5px; }
 
 .source-box-text {
   font-family: var(--font-body);
@@ -1883,7 +1919,7 @@ a {
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   11. بخش یادداشت
+   12. یادداشت
    ─────────────────────────────────────────────────────────────────────────── */
 .notes-section {
   margin-top: 22px;
@@ -1904,10 +1940,7 @@ a {
   margin-bottom: 12px;
 }
 
-.notes-head svg {
-  width: 16px;
-  height: 16px;
-}
+.notes-head svg { width: 16px; height: 16px; }
 
 .notes-input {
   width: 100%;
@@ -1949,7 +1982,7 @@ a {
 .notes-hint svg { color: var(--success); }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   12. مودال‌ها
+   13. مودال‌ها
    ─────────────────────────────────────────────────────────────────────────── */
 .modal {
   position: fixed;
@@ -2116,7 +2149,6 @@ a {
   font-size: 13px;
 }
 
-/* کدکس */
 .codex-intro {
   padding: 16px 18px;
   background: rgba(201, 162, 39, 0.06);
@@ -2190,7 +2222,6 @@ a {
   color: var(--fg-secondary);
 }
 
-/* نقشه‌ی سلسله‌ها */
 .dynasty-timeline {
   display: flex;
   flex-direction: column;
@@ -2277,7 +2308,6 @@ a {
   box-shadow: 0 0 20px -8px rgba(201, 162, 39, 0.4);
 }
 
-/* مدال‌ها */
 .awards-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -2337,7 +2367,6 @@ a {
 }
 
 .award-icon svg { width: 22px; height: 22px; }
-
 .award-meta { min-width: 0; flex: 1; }
 
 .award-title {
@@ -2357,7 +2386,6 @@ a {
   color: var(--fg-secondary);
 }
 
-/* آمار */
 .stats-section { margin-bottom: 22px; }
 
 .stats-section-title {
@@ -2469,11 +2497,9 @@ a {
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   13. مودال انتقال پیشرفت
+   14. مودال انتقال پیشرفت
    ─────────────────────────────────────────────────────────────────────────── */
-.transfer-section {
-  margin-bottom: 8px;
-}
+.transfer-section { margin-bottom: 8px; }
 
 .transfer-section-title {
   font-family: var(--font-ui);
@@ -2513,9 +2539,7 @@ a {
   font-style: normal;
 }
 
-.transfer-code-wrap {
-  margin-bottom: 10px;
-}
+.transfer-code-wrap { margin-bottom: 10px; }
 
 .transfer-code {
   width: 100%;
@@ -2570,7 +2594,7 @@ a {
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   14. مودال چالش روزانه
+   15. مودال چالش روزانه
    ─────────────────────────────────────────────────────────────────────────── */
 .challenge-intro {
   padding: 14px 16px;
@@ -2727,7 +2751,7 @@ a {
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   15. توست
+   16. توست
    ─────────────────────────────────────────────────────────────────────────── */
 .toast-box {
   position: fixed;
@@ -2803,7 +2827,7 @@ a {
 .toast-text { flex: 1; line-height: 1.5; }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   16. انیمیشن‌های کمکی
+   17. انیمیشن‌های کمکی
    ─────────────────────────────────────────────────────────────────────────── */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(10px); }
@@ -2828,7 +2852,7 @@ a {
 .anim-glow { animation: glow 2s ease-in-out infinite; }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   17. پاسخ‌گویی موبایل
+   18. پاسخ‌گویی موبایل
    ─────────────────────────────────────────────────────────────────────────── */
 @media (max-width: 640px) {
   .header-inner { padding: 10px 14px; }
@@ -2856,9 +2880,9 @@ a {
   .map-wrapper { padding: 12px; }
   .map-point-label { font-size: 9px; }
   .transfer-code { font-size: 10px; }
+  .chapter-card { min-height: 240px; }
 }
 
-/* کاهش حرکت برای کاربران با ترجیح دسترس‌پذیری */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -2866,4 +2890,4 @@ a {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-   }
+}
