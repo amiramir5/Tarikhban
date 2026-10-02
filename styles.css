@@ -1,11 +1,11 @@
 /* ═══════════════════════════════════════════════════════════════════════════
    تاریخ‌بان — استایل‌نامه‌ی اصلی
    سبک: ایرانی-تاریخی | پالت: لاجوردی، طلای کهنه، عاج
-   نسخه: ۴ (شامل فاز ۱ ارتقای بصری — تصاویر و بک‌گراندها)
+   نسخه: ۵ — شامل پیش‌درآمد، بازیگران، گفت‌وگوی چندمرحله‌ای، نتیجه، میراث
    ═══════════════════════════════════════════════════════════════════════════ */
 
 /* ───────────────────────────────────────────────────────────────────────────
-   1. متغیرهای پایه (Design Tokens)
+   1. متغیرهای پایه
    ─────────────────────────────────────────────────────────────────────────── */
 :root {
   --c-lapis-900: #0f1626;
@@ -404,7 +404,7 @@ a {
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   6. بخش قهرمان (Hero) — با تصویر واقعی
+   6. بخش قهرمان (Hero)
    ─────────────────────────────────────────────────────────────────────────── */
 .hero-grid {
   display: grid;
@@ -455,7 +455,6 @@ a {
   100% { transform: scale(1.08); }
 }
 
-/* لایه‌ی تیره روی عکس هیرو برای خوانایی متن */
 .hero-scene-bg::after {
   content: '';
   position: absolute;
@@ -471,10 +470,7 @@ a {
   pointer-events: none;
 }
 
-/* در صورت وجود SVG قدیمی، پنهان شود */
-.hero-scene-bg svg {
-  display: none;
-}
+.hero-scene-bg svg { display: none; }
 
 .hero-scene::before {
   content: '';
@@ -700,10 +696,7 @@ a {
   margin-bottom: 8px;
 }
 
-.widget-meter-value {
-  font-weight: 700;
-  color: var(--c-gold-300);
-}
+.widget-meter-value { font-weight: 700; color: var(--c-gold-300); }
 
 .widget-meter-bar {
   height: 5px;
@@ -778,7 +771,6 @@ a {
 
 .btn-primary:hover:not(:disabled) .btn-arrow { transform: translateX(-4px); }
 .btn-primary:active:not(:disabled) { transform: translateY(0); }
-
 .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .btn-outline {
@@ -932,7 +924,7 @@ a {
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   9. شبکه‌ی فصل‌ها و کارت‌های دارای بک‌گراند تصویری
+   9. شبکه‌ی فصل‌ها
    ─────────────────────────────────────────────────────────────────────────── */
 .chapters-grid {
   display: grid;
@@ -948,7 +940,6 @@ a {
   .chapters-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
-/* کارت فصل — با پشتیبانی از بک‌گراند دوره */
 .chapter-card {
   position: relative;
   background-color: var(--c-lapis-800);
@@ -966,7 +957,6 @@ a {
   min-height: 280px;
 }
 
-/* لایه‌ی تیره روی بک‌گراند دوره برای خوانایی متن */
 .chapter-card::before {
   content: '';
   position: absolute;
@@ -991,13 +981,11 @@ a {
   );
 }
 
-/* همه‌ی محتوای کارت بالای لایه‌ی تیره */
 .chapter-card > * {
   position: relative;
   z-index: 1;
 }
 
-/* بک‌گراند اختصاصی هر دوره */
 .chapter-card[data-era="ancient"] {
   background-image: url('./assets/era-ancient.jpg');
 }
@@ -1011,7 +999,6 @@ a {
   background-image: url('./assets/era-modern.jpg');
 }
 
-/* گوشه‌ی تزئینی پایین-راست */
 .chapter-card::after {
   content: '';
   position: absolute;
@@ -1047,13 +1034,8 @@ a {
   border-color: var(--border-gold-soft);
 }
 
-.chapter-card.is-done {
-  border-color: rgba(74, 138, 92, 0.5);
-}
-
-.chapter-card.is-bookmarked {
-  border-color: var(--c-gold-400);
-}
+.chapter-card.is-done { border-color: rgba(74, 138, 92, 0.5); }
+.chapter-card.is-bookmarked { border-color: var(--c-gold-400); }
 
 .chapter-card-head {
   display: flex;
@@ -1172,8 +1154,8 @@ a {
   line-height: 1.8;
   color: var(--fg-secondary);
   display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
   margin-bottom: 16px;
@@ -1221,9 +1203,7 @@ a {
   border: 1px solid var(--border-gold);
 }
 
-.foot-btn-review:hover {
-  background: rgba(201, 162, 39, 0.25);
-}
+.foot-btn-review:hover { background: rgba(201, 162, 39, 0.25); }
 
 .foot-btn-locked {
   background: rgba(0, 0, 0, 0.45);
@@ -1263,9 +1243,7 @@ a {
   filter: drop-shadow(0 0 30px rgba(201, 162, 39, 0.15));
 }
 
-.map-land {
-  transition: filter var(--dur-base) var(--ease-out);
-}
+.map-land { transition: filter var(--dur-base) var(--ease-out); }
 
 .map-point {
   cursor: pointer;
@@ -1290,11 +1268,7 @@ a {
 .map-point.is-done circle.map-point-core { fill: var(--c-emerald); }
 .map-point.is-done circle.map-point-halo { stroke: var(--c-emerald); }
 
-.map-point.is-locked {
-  cursor: not-allowed;
-  opacity: 0.4;
-}
-
+.map-point.is-locked { cursor: not-allowed; opacity: 0.4; }
 .map-point.is-locked circle.map-point-core { fill: var(--fg-muted); }
 .map-point.is-locked circle.map-point-halo { stroke: var(--fg-muted); }
 
@@ -1352,7 +1326,7 @@ a {
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   11. نمای داستان
+   11. نمای داستان — صحنه‌ی اصلی
    ─────────────────────────────────────────────────────────────────────────── */
 .story-toolbar {
   display: flex;
@@ -1420,6 +1394,7 @@ a {
   opacity: 0.6;
 }
 
+/* بستر تاریخی صحنه */
 .scene-context {
   display: flex;
   align-items: flex-start;
@@ -1455,6 +1430,113 @@ a {
   color: var(--fg-secondary);
 }
 
+/* ─── بخش پیش‌درآمد ─── */
+.intro-section {
+  margin-bottom: 22px;
+  padding: 18px 20px;
+  background: rgba(15, 22, 38, 0.5);
+  border: 1px solid var(--border-gold-soft);
+  border-right: 2px solid var(--c-turquoise-400);
+  border-radius: var(--radius-md);
+}
+
+.intro-text {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 2;
+  color: var(--c-ivory-300);
+  text-align: justify;
+}
+
+/* ─── سرتیترهای کوچک (پیش‌درآمد، بازیگران، نتیجه، میراث) ─── */
+.section-mini-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.section-mini-mark {
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  background: var(--c-turquoise-400);
+  transform: rotate(45deg);
+  box-shadow: 0 0 8px rgba(42, 157, 143, 0.6);
+}
+
+.section-mini-title {
+  font-family: var(--font-ui);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--c-turquoise-300);
+  letter-spacing: 0.3px;
+}
+
+.section-mini-head-aftermath .section-mini-mark { background: var(--c-gold-500); box-shadow: 0 0 8px rgba(201, 162, 39, 0.6); }
+.section-mini-head-aftermath .section-mini-title { color: var(--c-gold-300); }
+
+.section-mini-head-legacy .section-mini-mark { background: var(--c-emerald); box-shadow: 0 0 8px rgba(74, 138, 92, 0.6); }
+.section-mini-head-legacy .section-mini-title { color: #8fcfa0; }
+
+/* ─── بخش بازیگران ─── */
+.characters-section {
+  margin-bottom: 22px;
+}
+
+.characters-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+@media (min-width: 640px) {
+  .characters-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.character-card {
+  padding: 14px 16px;
+  background: rgba(15, 22, 38, 0.55);
+  border: 1px solid var(--border-gold-soft);
+  border-radius: var(--radius-md);
+  transition: all var(--dur-base) var(--ease-out);
+  position: relative;
+  overflow: hidden;
+}
+
+.character-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--c-gold-500), transparent);
+  opacity: 0.5;
+}
+
+.character-card:hover {
+  border-color: var(--border-gold);
+  background: rgba(15, 22, 38, 0.7);
+}
+
+.character-name {
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--c-gold-200);
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+.character-desc {
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--fg-secondary);
+}
+
+/* ─── سخنرانان ─── */
 .speakers-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -1578,6 +1660,7 @@ a {
   padding: 0 6px;
 }
 
+/* ─── جعبه‌ی گفت‌وگو ─── */
 .dialogue-box {
   position: relative;
   background: rgba(15, 22, 38, 0.75);
@@ -1654,7 +1737,59 @@ a {
   border-right: 2px solid var(--c-gold-500);
   padding-right: 16px;
   margin-bottom: 0;
-  letter-spacing: 0;
+  min-height: 60px;
+  transition: opacity var(--dur-base) var(--ease-out);
+}
+
+.dialogue-quote.is-changing {
+  opacity: 0;
+}
+
+.dialogue-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border-gold-soft);
+}
+
+.btn-dialogue-nav {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(201, 162, 39, 0.12);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-md);
+  color: var(--c-gold-300);
+  transition: all var(--dur-fast) var(--ease-out);
+}
+
+.btn-dialogue-nav svg { width: 18px; height: 18px; }
+
+.btn-dialogue-nav:hover:not(:disabled) {
+  background: rgba(201, 162, 39, 0.25);
+  border-color: var(--c-gold-400);
+  color: var(--c-gold-200);
+  transform: scale(1.05);
+}
+
+.btn-dialogue-nav:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.dialogue-progress {
+  font-family: 'Vazirmatn', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--c-turquoise-300);
+  letter-spacing: 0.5px;
+  min-width: 70px;
+  text-align: center;
 }
 
 .dialogue-explanation {
@@ -1667,6 +1802,7 @@ a {
   color: var(--fg-secondary);
 }
 
+/* ─── صحنه‌ی تصمیم ─── */
 .decision-stage { padding-top: 6px; }
 
 .decision-head {
@@ -1775,6 +1911,7 @@ a {
 
 .option-text { flex: 1; }
 
+/* ─── پنل بازخورد ─── */
 .feedback-panel {
   margin-top: 22px;
   padding: 22px 24px;
@@ -1918,9 +2055,43 @@ a {
   border-top: 1px solid var(--border-gold-soft);
 }
 
-/* ───────────────────────────────────────────────────────────────────────────
-   12. یادداشت
-   ─────────────────────────────────────────────────────────────────────────── */
+/* ─── بخش نتیجه ─── */
+.aftermath-section {
+  margin-top: 22px;
+  padding: 20px 22px;
+  background: linear-gradient(160deg, rgba(201, 162, 39, 0.08), rgba(201, 162, 39, 0.02));
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-md);
+  animation: feedbackIn var(--dur-slow) var(--ease-out);
+}
+
+.aftermath-text {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 2;
+  color: var(--c-ivory-300);
+  text-align: justify;
+}
+
+/* ─── بخش میراث ─── */
+.legacy-section {
+  margin-top: 14px;
+  padding: 20px 22px;
+  background: linear-gradient(160deg, rgba(74, 138, 92, 0.1), rgba(74, 138, 92, 0.02));
+  border: 1px solid rgba(74, 138, 92, 0.4);
+  border-radius: var(--radius-md);
+  animation: feedbackIn var(--dur-slow) var(--ease-out);
+}
+
+.legacy-text {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 2;
+  color: #d4e8db;
+  text-align: justify;
+}
+
+/* ─── یادداشت ─── */
 .notes-section {
   margin-top: 22px;
   padding: 18px 20px;
@@ -1982,7 +2153,7 @@ a {
 .notes-hint svg { color: var(--success); }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   13. مودال‌ها
+   12. مودال‌ها
    ─────────────────────────────────────────────────────────────────────────── */
 .modal {
   position: fixed;
@@ -2149,6 +2320,7 @@ a {
   font-size: 13px;
 }
 
+/* کدکس */
 .codex-intro {
   padding: 16px 18px;
   background: rgba(201, 162, 39, 0.06);
@@ -2222,6 +2394,7 @@ a {
   color: var(--fg-secondary);
 }
 
+/* نقشه‌ی سلسله‌ها */
 .dynasty-timeline {
   display: flex;
   flex-direction: column;
@@ -2308,6 +2481,7 @@ a {
   box-shadow: 0 0 20px -8px rgba(201, 162, 39, 0.4);
 }
 
+/* مدال‌ها */
 .awards-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -2386,6 +2560,7 @@ a {
   color: var(--fg-secondary);
 }
 
+/* آمار */
 .stats-section { margin-bottom: 22px; }
 
 .stats-section-title {
@@ -2497,7 +2672,7 @@ a {
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   14. مودال انتقال پیشرفت
+   13. مودال انتقال
    ─────────────────────────────────────────────────────────────────────────── */
 .transfer-section { margin-bottom: 8px; }
 
@@ -2594,7 +2769,7 @@ a {
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   15. مودال چالش روزانه
+   14. مودال چالش روزانه
    ─────────────────────────────────────────────────────────────────────────── */
 .challenge-intro {
   padding: 14px 16px;
@@ -2751,7 +2926,7 @@ a {
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   16. توست
+   15. توست
    ─────────────────────────────────────────────────────────────────────────── */
 .toast-box {
   position: fixed;
@@ -2827,7 +3002,7 @@ a {
 .toast-text { flex: 1; line-height: 1.5; }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   17. انیمیشن‌های کمکی
+   16. انیمیشن‌ها
    ─────────────────────────────────────────────────────────────────────────── */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(10px); }
@@ -2852,7 +3027,7 @@ a {
 .anim-glow { animation: glow 2s ease-in-out infinite; }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   18. پاسخ‌گویی موبایل
+   17. پاسخ‌گویی موبایل
    ─────────────────────────────────────────────────────────────────────────── */
 @media (max-width: 640px) {
   .header-inner { padding: 10px 14px; }
@@ -2870,6 +3045,7 @@ a {
   .story-toolbar { padding: 12px 14px; }
   .story-era-title { font-size: 15px; }
   .dialogue-quote { font-size: 17px; line-height: 1.85; }
+  .intro-text, .aftermath-text, .legacy-text { font-size: 13px; line-height: 1.95; }
   .modal-body { padding: 18px; }
   .modal-head { padding: 14px 16px; }
   .toast-box { left: 12px; right: 12px; max-width: none; }
@@ -2881,6 +3057,7 @@ a {
   .map-point-label { font-size: 9px; }
   .transfer-code { font-size: 10px; }
   .chapter-card { min-height: 240px; }
+  .characters-grid { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {
